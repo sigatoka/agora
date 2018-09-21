@@ -1,19 +1,19 @@
 import React from 'react';
 
 export default function FileListItemState({ progress, completed }) {
-
+	
 	let borderColor = "#727375";
 	if (completed) borderColor = "#FFE4B1";
 
 	const containerStyle = {
 		flex:"none",
-		width:((completed)?"4px":"40px"),
-		height:((completed)?"4px":"40px"),
-		margin:((completed)?"14px":"0px"),
+		width:((progress<=0)?"8px":"30px"),
+		height:((progress<=0)?"8px":"30px"),
+		margin:((progress<=0)?"16px":"0px"),
 		display:"block",
-		backgroundColor:"transparent",
+		backgroundColor:((progress<=0)?borderColor:"transparent"),
 		borderRadius:"50%",
-		border:`4px solid ${borderColor}`,
+		border:`${((progress<=0)?"0px":"4px")} solid ${borderColor}`,
 		textAlign:"center",
 		verticalAlign:"center"
 	}

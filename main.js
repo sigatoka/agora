@@ -13,10 +13,10 @@ app.on('ready', () => {
 		webPreferences: {
 			backgroundThrottling:false
 		},
-		titleBarStyle:'hiddenInset'
+		//titleBarStyle:'hiddenInset'
 	});
 
-	mainWindow.webContents.openDevTools()
+	//mainWindow.webContents.openDevTools()
 	// Load root display
 	mainWindow.loadURL(`file://${__dirname}/public/index.html`);
 	// Handle closed window
@@ -41,10 +41,10 @@ app.on('ready', () => {
 
 ipcMain.on('files:added', (event, files) => {
 
-	const promises = files.map(({ name, path, size, type, completed, progress }) => {
+	const promises = files.map(({ hash, name, fileName, path, size, type, completed, progress }) => {
 		return new Promise((resolve, reject) => {
 			ffmpeg.ffprobe(path, (err, { format:{ duration } }) => {
-				resolve({ name, path, size, type, duration, completed, progress });
+				resolve({ hash, name, fileName, path, size, type, duration, completed, progress });
 			});
 		});
 	});
@@ -61,10 +61,11 @@ ipcMain.on('convert:start', (event, files) => {
 	const outputPath = __dirname+'/test.avi';
 
 	_.each(files, (file) => {
-		const { name, path, size, type, duration } = file;
+		console.log("Convert",file)
+		const { hash, name, fileName, path, size, type, duration } = file;
 		ffmpeg(path).on('progress', ({ percent }) => {
 			//console.log(progress);
-			mainWindow.webContents.send('convert:progress', { name, path, size, type, duration, progress:percent });
+			mainWindow.webContents.send('convert:progress', { hash, name, fileName, path, size, type, duration, progress:percent });
 		}).on('end', (stdout, stdder) => {
 			mainWindow.webContents.send('convert:end', { file, outputPath })
 		}).output(outputPath).run();

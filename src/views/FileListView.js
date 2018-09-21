@@ -30,30 +30,32 @@ class FileListView extends React.Component {
 		this.props.updateFile(video);
 	}
 
-	didSelectShowInFolder({ path }) {
+	didSelectShowInFolder(hash) {
+		const { path } = this.props.files[hash];
 		this.props.showInFolder(path);
 	}
 
-	didSelectRemove(video) {
-		console.log("remove",video)
-		this.props.removeFile(video);
+	didSelectRemove(hash) {
+		const file = this.props.files[hash];
+		this.props.removeFile(file);
 	}
 
 	render() {
 		return (
 			<div style={{flex:"10 5",...this.props.style,padding:"0.2% 0px",overflowX:"hidden",overflowY:"auto"}}>
-				{Object.keys(this.props.files).map((key, idx) => {
+				{Object.keys(this.props.files).map((key) => {
 					const asset = this.props.files[key];
 					return <FileListItem
-						key={idx}
+						key={key}
 						onShow={this.didSelectShowInFolder.bind(this)}
 						onChange={this.didChangeValues.bind(this)}
 						onRemove={this.didSelectRemove.bind(this)}
+						hash={key}
 						name={asset.name}
 						fileName={asset.fileName}
 						path={asset.path}
 						type={asset.type}
-						complete={asset.complete||(idx===1)}
+						complete={asset.complete}
 						progress={asset.progress}
 					/>
 				})}

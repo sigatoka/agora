@@ -11,13 +11,12 @@ class VideoView extends React.Component {
 
 	didDropFiles(acceptedFiles, rejectedFiles) {
 
-		const videos = acceptedFiles.map(({ name, path, size, type }, idx) => {
-
-			return { fileName:name, path, size, type, completed:(idx>0) };
+		const files = acceptedFiles.map(({ name, path, size, type }, idx) => {
+			return { fileName:name, path, size, type };
 		});
 
-		if (videos.length <= 0) return;
-		this.props.addFiles(videos);
+		if (files.length <= 0) return;
+		this.props.addFiles(files);
 	}
 
 	renderDropLabel({ isDragActive, isDragReject }) {
@@ -33,7 +32,7 @@ class VideoView extends React.Component {
 	render() {
 		return (
 			<div style={{...this.props.style,padding:"1%",textAlign:"center"}}>
-				<Dropzone multiple accept="video/*" onDrop={this.didDropFiles.bind(this)}>{this.renderDropLabel}</Dropzone>
+				<Dropzone multiple accept="video/*" onDrop={this.didDropFiles.bind(this)} style={{width:"100%",maxHeight:"500px",backgroundColor:"transparent",border:"2px dashed #232323",borderRadius:"12px"}}>{this.renderDropLabel}</Dropzone>
 			</div>
 		)
 	}

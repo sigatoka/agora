@@ -16,6 +16,7 @@ const VIDEO_FORMATS = [
 export default class FileListItem extends React.Component {
 
 	static defaultProps = {
+		hash:'',
 		name:'',
 		fileName:'',
 		path:'',
@@ -29,6 +30,7 @@ export default class FileListItem extends React.Component {
 	}
 
 	static propTypes = {
+		hash:string,
 		name:string,
 		fileName:string,
 		path:string,
@@ -49,12 +51,12 @@ export default class FileListItem extends React.Component {
 
 	didSelectShow(event) {
 		event.preventDefault();
-		this.props.onShow(this.props.video);
+		this.props.onShow(this.props.hash);
 	}
 
 	didSelectRemove(event) {
 		event.preventDefault();
-		this.props.onRemove(this.props.video);
+		this.props.onRemove(this.props.hash);
 	}
 
 	didHoverFileName(event) {
@@ -64,6 +66,7 @@ export default class FileListItem extends React.Component {
 	render() {
 
 		const {
+			hash,
 			name,
 			fileName,
 			path,
@@ -73,13 +76,16 @@ export default class FileListItem extends React.Component {
 		} = this.props;
 
 		return (
-			<div style={{width:"94%",maxHeight:"50px",backgroundColor:"#313131",color:"#727375",display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"stretch",margin:"1.5%",padding:"1.5%",borderRadius:"10px"}}>
-				<FileListItemState progress={progress} completed={complete}/>
-				<span style={{flex:"10 3",padding:"0 1%",margin:0,display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"stretch"}}>
-					<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"stretch",padding:"1%"}}>
-						<input type="text" defaultValue={name} style={{fontSize:"1.1em",color:"#A1A2A6",backgroundColor:"transparent",border:"none",outline:"none"}}/>
+			<div style={{width:"94%",maxHeight:"40px",backgroundColor:"#232323",color:"#313131",display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"stretch",margin:"1.5%",padding:"1.5%",borderRadius:"10px"}}>
+				<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"row",justifyContent:"space-around",alignItems:"stretch",padding:0,margin:0}}>
+					<FileListItemState progress={progress} completed={complete}/>
+					<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"stretch",padding:"1%",marginLeft:"2%"}}>
+						<input type="text" defaultValue={name} style={{fontSize:"1.1em",color:((complete)?"#FFE4B1":"#A1A2A6"),backgroundColor:"transparent",border:"none",outline:"none"}}/>
 						<span style={{fontSize:"0.9em"}} onMouseOver={this.didHoverFileName.bind(this)}>{fileName}</span>
 					</span>
+				</span>
+				<span style={{flex:"10 3",padding:"0 1%",margin:0,display:"flex",flexDirection:"row",justifyContent:"center",alignItems:"stretch"}}>
+					<span style={{width:"60px",backgroundColor:"#383838",color:"#B3B4B8",outline:"none",border:"none",fontSize:"0.9em",padding:"0px 18px",marginRight:"5px",borderRadius:"5px",textAlign:"center",verticalAlign:"center",display:"flex",justifyContent:"center",alignItems:"center"}}>{type}</span>
 					<select defaultValue={type} onChange={this.didChangeType.bind(this)} style={{width:'180px',backgroundColor:"#383838",color:"#B3B4B8",outline:"none",border:"none",fontSize:"0.9em",padding:"0px 18px"}}>
 						{VIDEO_FORMATS.map(format => (
 							<option key={format.value} value={format.value}>{format.label}</option>
@@ -88,8 +94,8 @@ export default class FileListItem extends React.Component {
 				</span>
 				<span style={{flex:"none",display:"flex",flexDirection:"row",alignSelf:"stretch",justifyContent:"space-between",alignItems:"stretch",margin:0,padding:0}}>
 					{(complete||progress>0)
-						? <button onClick={this.didSelectShow.bind(this)} style={{backgroundColor:"#383838",outline:"none",border:"none",padding:"0px 18px",color:"#B3B4B8",fontWeight:500,fontSize:"0.9em",borderRadius:"7px",cursor:"pointer"}}>Show</button>
-						: <button onClick={this.didSelectRemove.bind(this)} style={{backgroundColor:"#383838",outline:"none",border:"none",padding:"0px 18px",color:"#B3B4B8",fontWeight:500,fontSize:"0.9em",borderRadius:"7px",cursor:"pointer"}}>Remove</button>
+						? <button onClick={this.didSelectShow.bind(this)} style={{minWidth:"100px"}}>Show</button>
+						: <button onClick={this.didSelectRemove.bind(this)} style={{minWidth:"100px"}}>Remove</button>
 					}
 				</span>
 			</div>

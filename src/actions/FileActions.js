@@ -1,5 +1,6 @@
 // Modules
 import { ipcRenderer } from 'electron';
+import createHash from 'create-hash';
 // Types
 import {
 	UPDATE_FILE,
@@ -21,8 +22,9 @@ export const updateFile = file => dispatch => {
 export const addFiles = files => dispatch => {
 	// Process files
 	files = files.map(({ fileName, path, size, type }) => {
-		const name = fileName.split(/\./gi)[0];
-		return { name, fileName, path, size, type, completed:false, progress:0 };
+		const name = nameFromFileName(fileName);
+		const hash = fileHashFromString(path);
+		return { hash, name, fileName, path, size, type, completed:false, progress:0 };
 	});
 	// Notify of files
 	ipcRenderer.send('files:added', files);
@@ -35,16 +37,15 @@ export const addFiles = files => dispatch => {
 export const convertFiles = files => dispatch => {
 	// Removed completed or in progress
 	files = files.filter((file) => {
-		return !(file.completed || file.progress <= 0);
+		return !(file.completed || file.progress > 0);
 	});
 	// Begin conversion
 	ipcRenderer.send('convert:start', files);
-
+	// Observe progress
 	ipcRenderer.on('convert:progress', (event, file) => {
-		console.log(file.path, file.progress);
 		dispatch({ type:CONVERT_PROGRESS, payload:file });
 	});
-
+	// Monitor completion
 	ipcRenderer.on('convert:end', (event, { file, outputPath }) => {
 		dispatch({ type:CONVERT_COMPLETE, payload:file });
 	});
@@ -60,4 +61,12 @@ export const removeAllFiles = () => dispatch => {
 
 export const showInFolder = path => dispatch => {
 	ipcRenderer.send('file:show', path);
+}
+
+function nameFromFileName(fileName) {
+	return fileName.split(/\./gi)[0];
+}
+
+function fileHashFromString(str) {
+	return createHash('sha256').update(str).digest('hex');
 }
