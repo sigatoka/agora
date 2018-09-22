@@ -21,10 +21,11 @@ export const updateFile = file => dispatch => {
 
 export const addFiles = files => dispatch => {
 	// Process files
-	files = files.map(({ fileName, path, size, type }) => {
-		const name = nameFromFileName(fileName);
+	files = files.map(({ name, path, size, type, format }) => {
+		const label = labelFromFileName(name);
 		const hash = fileHashFromString(path);
-		return { hash, name, fileName, path, size, type, completed:false, progress:0 };
+		const directory = path.replace(name,'');
+		return { hash, label, name, path, directory, size, type, format, output:format, completed:false, progress:0 };
 	});
 	// Notify of files
 	ipcRenderer.send('files:added', files);
@@ -59,12 +60,13 @@ export const removeAllFiles = () => dispatch => {
 	dispatch({ type:REMOVE_ALL_FILES });
 }
 
-export const showInFolder = path => dispatch => {
-	ipcRenderer.send('file:show', path);
+export const showInFolder = ({ directory, name, format, output }) => dispatch => {
+	const outputPath = file.directory + name.replace(format, output);
+	ipcRenderer.send('file:show', outputPath);
 }
 
-function nameFromFileName(fileName) {
-	return fileName.split(/\./gi)[0];
+function labelFromFileName(name) {
+	return name.split(/\./gi)[0];
 }
 
 function fileHashFromString(str) {

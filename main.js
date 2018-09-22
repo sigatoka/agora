@@ -1,5 +1,6 @@
 // Electron Components
 const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
+const colors = require('colors');
 const _ = require('lodash');
 const ffmpeg = require('fluent-ffmpeg');
 // Main Window Reference
@@ -16,7 +17,7 @@ app.on('ready', () => {
 		//titleBarStyle:'hiddenInset'
 	});
 
-	//mainWindow.webContents.openDevTools()
+	mainWindow.webContents.openDevTools()
 	// Load root display
 	mainWindow.loadURL(`file://${__dirname}/public/index.html`);
 	// Handle closed window
@@ -41,10 +42,10 @@ app.on('ready', () => {
 
 ipcMain.on('files:added', (event, files) => {
 
-	const promises = files.map(({ hash, name, fileName, path, size, type, completed, progress }) => {
+	const promises = files.map(({ hash, label, name, path, directory, size, type, format, output, completed, progress }) => {
 		return new Promise((resolve, reject) => {
 			ffmpeg.ffprobe(path, (err, { format:{ duration } }) => {
-				resolve({ hash, name, fileName, path, size, type, duration, completed, progress });
+				resolve({ hash, label, name, path, directory, size, type, format, output, duration, completed, progress });
 			});
 		});
 	});
@@ -52,20 +53,20 @@ ipcMain.on('files:added', (event, files) => {
 	Promise.all(promises).then((results) => {
 		mainWindow.webContents.send('files:meta', results);
 	}).catch((error) => {
-		console.log(error);
+		console.log(colors.red(error));
 	});
 });
 
 ipcMain.on('convert:start', (event, files) => {
 
-	const outputPath = __dirname+'/test.avi';
-
 	_.each(files, (file) => {
-		console.log("Convert",file)
-		const { hash, name, fileName, path, size, type, duration } = file;
+
+		const { hash, label, name, path, directory, size, type, format, output, duration } = file;
+		const outputPath = file.directory + name.replace(format, output);
+
 		ffmpeg(path).on('progress', ({ percent }) => {
 			//console.log(progress);
-			mainWindow.webContents.send('convert:progress', { hash, name, fileName, path, size, type, duration, progress:percent });
+			mainWindow.webContents.send('convert:progress', { hash, label, name, path, directory, size, type, format, output, duration, progress:percent });
 		}).on('end', (stdout, stdder) => {
 			mainWindow.webContents.send('convert:end', { file, outputPath })
 		}).output(outputPath).run();
@@ -73,6 +74,5 @@ ipcMain.on('convert:start', (event, files) => {
 });
 
 ipcMain.on('file:show', (event, outputPath) => {
-	console.log("Show", outputPath)
 	shell.showItemInFolder(outputPath);
 });

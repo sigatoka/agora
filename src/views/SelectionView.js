@@ -12,7 +12,8 @@ class VideoView extends React.Component {
 	didDropFiles(acceptedFiles, rejectedFiles) {
 
 		const files = acceptedFiles.map(({ name, path, size, type }, idx) => {
-			return { fileName:name, path, size, type };
+			const components = type.split(/\//gi);
+			return { name, path, size, format:components[1], type:components[0] };
 		});
 
 		if (files.length <= 0) return;
