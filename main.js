@@ -17,7 +17,7 @@ app.on('ready', () => {
 		//titleBarStyle:'hiddenInset'
 	});
 
-	mainWindow.webContents.openDevTools()
+	//mainWindow.webContents.openDevTools()
 	// Load root display
 	mainWindow.loadURL(`file://${__dirname}/public/index.html`);
 	// Handle closed window
@@ -40,6 +40,12 @@ app.on('ready', () => {
 	Menu.setApplicationMenu(menu);
 });
 
+/**
+ * @brief Get File Metadata
+ * @desc Retrieves metadata for a list of files
+ * @param event <object> IPC event data
+ * @param files <array> List of files
+ */
 ipcMain.on('files:added', (event, files) => {
 
 	const promises = files.map(({ hash, label, name, path, directory, size, type, format, output, completed, progress }) => {
@@ -57,6 +63,13 @@ ipcMain.on('files:added', (event, files) => {
 	});
 });
 
+/**
+ * @brief Convert Files
+ * @desc Iterates all files and passes to ffmpeg for conversion.
+ * @param event <object> IPC event data
+ * @param files <array> List of files for conversion
+ * @note Progress percentage from ffmpeg might not be accurate
+ */
 ipcMain.on('convert:start', (event, files) => {
 
 	_.each(files, (file) => {
@@ -73,6 +86,12 @@ ipcMain.on('convert:start', (event, files) => {
 	});
 });
 
+/**
+ * @brief Show File
+ * @desc Opens the path to file.
+ * @param event <object> IPC event data
+ * @param outputPath <string> Path to file
+ */
 ipcMain.on('file:show', (event, outputPath) => {
 	shell.showItemInFolder(outputPath);
 });

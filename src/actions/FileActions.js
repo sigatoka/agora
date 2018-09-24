@@ -25,7 +25,7 @@ export const addFiles = files => dispatch => {
 		const label = labelFromFileName(name);
 		const hash = fileHashFromString(path);
 		const directory = path.replace(name,'');
-		return { hash, label, name, path, directory, size, type, format, output:format, completed:false, progress:0 };
+		return { hash, label, name, path, directory, size, type, format, output:format, complete:false, progress:0 };
 	});
 	// Notify of files
 	ipcRenderer.send('files:added', files);
@@ -38,7 +38,7 @@ export const addFiles = files => dispatch => {
 export const convertFiles = files => dispatch => {
 	// Removed completed or in progress
 	files = files.filter((file) => {
-		return !(file.completed || file.progress > 0);
+		return !(file.complete || file.progress > 0);
 	});
 	// Begin conversion
 	ipcRenderer.send('convert:start', files);

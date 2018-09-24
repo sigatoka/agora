@@ -50,7 +50,7 @@ class FileList extends React.Component {
 
 		return (
 			<div style={{flex:"10 5",...this.props.style,padding:"0.2% 0px",overflowX:"hidden",overflowY:"auto"}}>
-				<Transition keys={keys} from={{opacity:0,height:0}} enter={{opacity:1,height:40}} leave={{opacity:0,height:0,pointerEvents:'none'}}>
+				<Transition keys={keys} from={{opacity:0,height:0,padding:0}} enter={{opacity:1,height:40,padding:10}} leave={{opacity:0,height:0,pointerEvents:'none',padding:0}}>
 					{data.map(asset => styles =>
 						<FileListItem
 							style={styles}

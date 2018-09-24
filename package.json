@@ -10,12 +10,6 @@
     "electron": "electron ."
   },
   "dependencies": {
-    "babel-core": "^6.24.0",
-    "babel-loader": "^6.4.1",
-    "babel-preset-es2015": "^6.24.0",
-    "babel-preset-react": "^6.23.0",
-    "babel-preset-stage-1": "^6.22.0",
-    "colors": "^1.3.2",
     "create-hash": "^1.2.0",
     "fluent-ffmpeg": "^2.1.2",
     "lodash": "^4.17.4",
@@ -24,20 +18,27 @@
     "react": "^16.5.x",
     "react-dom": "^16.5.x",
     "react-dropzone": "^3.13.4",
+    "react-lottie": "^1.2.3",
     "react-motion": "^0.5.2",
     "react-redux": "^5.0.3",
     "react-router": "^4.0.0",
     "react-router-dom": "^4.3.x",
     "react-spring": "^5.8.0",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0",
-    "webpack": "^2.3.2",
-    "webpack-dev-server": "^2.4.2"
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "babel-preset-stage-1": "^6.22.0",
+    "colors": "^1.3.2",
     "css-loader": "^1.0.0",
     "css-modules": "^0.3.0",
-    "electron": "~>1.8.2-beta5",
-    "style-loader": "^0.23.0"
+    "electron": "~>1.8.x",
+    "style-loader": "^0.23.0",
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
   }
 }

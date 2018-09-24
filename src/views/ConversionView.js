@@ -26,10 +26,13 @@ class ConversionView extends React.Component {
 	}
 
 	render() {
+
+		const hasContent = Object.keys(this.props.files).length>0;
+
 		return (
-			<div style={{...this.props.style}}>
-				<button onClick={this.didSelectClear.bind(this)}>Cancel</button>
-				<button onClick={this.didSelectConvert.bind(this)}>Convert</button>
+			<div style={{...this.props.style,margin:"0.5%"}}>
+				<button onClick={this.didSelectClear.bind(this)} disabled={!hasContent} style={{margin:"0.5%"}}>Cancel</button>
+				<button onClick={this.didSelectConvert.bind(this)} disabled={!hasContent} style={{margin:"0.5%"}}>Convert</button>
 			</div>
 		)
 	}
