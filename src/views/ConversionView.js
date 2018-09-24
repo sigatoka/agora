@@ -6,6 +6,10 @@ import {
 	convertFiles
 } from '../actions/FileActions';
 
+function mapStateToProps({ files }) {
+	return { files };
+}
+
 class ConversionView extends React.Component {
 
 	didSelectClear(event) {
@@ -15,20 +19,23 @@ class ConversionView extends React.Component {
 
 	didSelectConvert(event) {
 		event.preventDefault();
-		const videos = Object.keys(this.props.videos).map((key, idx) => {
-			return this.props.videos[key];
+		const files = Object.keys(this.props.files).map((hash) => {
+			return this.props.files[hash];
 		});
-		this.props.convertFiles(videos);
+		this.props.convertFiles(files);
 	}
 
 	render() {
+
+		const hasContent = Object.keys(this.props.files).length>0;
+
 		return (
-			<div style={{flex:"none"}}>
-				<button onClick={this.didSelectClear.bind(this)}>Cancel</button>
-				<button onClick={this.didSelectConvert.bind(this)}>Convert</button>
+			<div style={{...this.props.style,margin:"0.5%"}}>
+				<button onClick={this.didSelectClear.bind(this)} disabled={!hasContent} style={{margin:"0.5%"}}>Cancel</button>
+				<button onClick={this.didSelectConvert.bind(this)} disabled={!hasContent} style={{margin:"0.5%"}}>Convert</button>
 			</div>
 		)
 	}
 }
 
-export default connect(null, {removeAllFiles,convertFiles})(ConversionView);
+export default connect(mapStateToProps, {removeAllFiles,convertFiles})(ConversionView);

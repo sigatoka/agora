@@ -24,10 +24,23 @@ module.exports = {
 	module: {
 		loaders: [
 			{
-				exclude: /node_modules/,
+				exclude: [
+					/node_modules/,
+					/.json?/
+				],
 				loader: 'babel-loader',
 				query: {
 					presets: ['react', 'es2015', 'stage-1']
+				}
+			}, {
+				test: /\.css$/,
+				loader: 'style-loader'
+			}, {
+				test: /\.css$/,
+				loader: 'css-loader',
+				query: {
+					modules: true,
+					localIdentName: '[name]_[local]_[hash:base64:4]'
 				}
 			}
 		]
