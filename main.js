@@ -2,6 +2,8 @@
 const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const colors = require('colors');
 const _ = require('lodash');
+const fs = require('fs');
+const _path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 // Main Window Reference
 let mainWindow = null;
@@ -17,7 +19,7 @@ app.on('ready', () => {
 		//titleBarStyle:'hiddenInset'
 	});
 
-	//mainWindow.webContents.openDevTools()
+	mainWindow.webContents.openDevTools()
 	// Load root display
 	mainWindow.loadURL(`file://${__dirname}/public/index.html`);
 	// Handle closed window
@@ -38,6 +40,13 @@ app.on('ready', () => {
 	]);
 
 	Menu.setApplicationMenu(menu);
+});
+
+ipcMain.on('library:load', (event, files) => {
+	const libraryPath = _path.join(__dirname, 'library');
+	fs.readdir(libraryPath, (err, files) => {
+		mainWindow.webContents.send('library:files', files);
+	});
 });
 
 /**

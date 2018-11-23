@@ -3,7 +3,7 @@ import { object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Transition } from 'react-spring'
 // Components
-import FileListItem from '../components/FileListItem';
+import TaskListItem from '../components/TaskListItem';
 // Actions
 import {
 	updateFile,
@@ -17,7 +17,7 @@ function mapStateToProps({ files }) {
 	return { files };
 }
 
-class FileList extends React.Component {
+class TaskList extends React.Component {
 
 	static defaultProps = {
 		files:{}
@@ -52,7 +52,7 @@ class FileList extends React.Component {
 			<div style={{flex:"10 5",...this.props.style,padding:"0.2% 0px",overflowX:"hidden",overflowY:"auto"}}>
 				<Transition keys={keys} from={{opacity:0,height:0,padding:0}} enter={{opacity:1,height:40,padding:10}} leave={{opacity:0,height:0,pointerEvents:'none',padding:0}}>
 					{data.map(asset => styles =>
-						<FileListItem
+						<TaskListItem
 							style={styles}
 							key={asset.hash}
 							onShow={this.didSelectShowInFolder.bind(this)}
@@ -76,4 +76,4 @@ class FileList extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps, {updateFile,convertFiles,removeFile,removeAllFiles,showInFolder})(FileList);
+export default connect(mapStateToProps, {updateFile,convertFiles,removeFile,removeAllFiles,showInFolder})(TaskList);

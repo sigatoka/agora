@@ -1,6 +1,6 @@
 import React from 'react';
 import Lottie from '../lottie/Lottie';
-import * as animationData from '../lottie/delete.json';
+import * as animationData from '../lottie/data.json';
 
 const defaultOptions = {
 	loop: false,
@@ -11,7 +11,7 @@ const defaultOptions = {
 	}
 }
 
-export default class FileListItemState extends React.Component {
+export default class TaskListItemState extends React.Component {
 
     state = {
     	progress:0,
@@ -20,7 +20,9 @@ export default class FileListItemState extends React.Component {
     }
 
     isReady() {
-    	this.setState({ stopped:false });
+    	setTimeout(() => {
+    		this.setState({ stopped:false });
+    	}, 500);
     }
 
     didStart(segment) {
@@ -36,17 +38,15 @@ export default class FileListItemState extends React.Component {
 
     	return (
 			<Lottie
-                style={{color:"#8E8D8A",backgroundColor:"transparent",border:"1px solid rgba(142,141,138,0.1)",verticalAlign:"center",padding:"6px",borderRadius:"4px",cursor:"pointer"}}
-                options={defaultOptions}
-                height={24}
-                width={24}
-                isStopped={this.state.stopped}
-                isPaused={this.state.paused}
+				options={defaultOptions}
+				height={40}
+				width={40}
+				isStopped={this.state.stopped}
+				isPaused={this.state.paused}
                 onReady={this.isReady.bind(this)}
-                onStart={this.didStart.bind(this)}
+				onStart={this.didStart.bind(this)}
                 onEnd={this.didComplete.bind(this)}
-                onClick={this.props.onClick.bind(this)}
-            />
+			/>
 		)
     }
 }

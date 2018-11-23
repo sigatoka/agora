@@ -1,9 +1,6 @@
 // Modules
 import React from 'react';
 import { string, number, bool, func } from 'prop-types';
-// Components
-import FileListItemState from './FileListItemState';
-import FileListItemDelete from './FileListItemDelete';
 // Formats
 const VIDEO_FORMATS = [
   {value:'avi',label:'AVI'},
@@ -94,27 +91,10 @@ export default class FileListItem extends React.Component {
 		} = this.props;
 
 		return (
-			<div style={{width:"97%",maxHeight:"40px",...this.props.style,backgroundColor:"transparent",color:"#313131",display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"stretch",margin:0,padding:"10px",borderRadius:"10px",border:"none",borderBottom:"1px solid #eae9e1"}}>
-				<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"row",justifyContent:"space-around",alignItems:"stretch",padding:0,margin:0}}>
-					<FileListItemState progress={progress} completed={complete}/>
-					<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"stretch",padding:"1%",marginLeft:"2%"}}>
-						<input type="text" defaultValue={label} style={{fontSize:"1.1em",color:((complete)?"#E98074":"#8e8d8a"),backgroundColor:"transparent",border:"none",outline:"none"}}/>
-						<span style={{fontSize:"0.9em",color:"rgba(142,141,138,0.5)"}} onMouseOver={this.didHoverFileName.bind(this)}>{name}</span>
-					</span>
-				</span>
-				<span style={{flex:"10 3",padding:"0 1%",margin:0,display:"flex",flexDirection:"row",justifyContent:"center",alignItems:"stretch"}}>
-					<span style={{width:"60px",backgroundColor:"#eae9e1",color:"#cbc7b4",outline:"none",border:"none",fontSize:"0.9em",padding:"0px 18px",marginRight:"5px",borderRadius:"5px",textAlign:"center",verticalAlign:"center",display:"flex",justifyContent:"center",alignItems:"center"}}>{format.toUpperCase()}</span>
-					<select defaultValue={output} onChange={this.didChangeType.bind(this)} style={{width:'180px',backgroundColor:"#eae9e1",color:"#cbc7b4",outline:"none",border:"none",fontSize:"0.9em",padding:"0px 18px"}}>
-						{VIDEO_FORMATS.map(FORMAT => (
-							<option key={FORMAT.value} value={FORMAT.value}>{FORMAT.label}</option>
-						))}
-					</select>
-				</span>
-				<span style={{flex:"none",display:"flex",flexDirection:"row",alignSelf:"stretch",justifyContent:"space-between",alignItems:"stretch",margin:0,padding:0}}>
-					{(complete||progress>0)
-						? <button onClick={this.didSelectShow.bind(this)} style={{minWidth:"100px"}}>Show</button>
-						: <FileListItemDelete onClick={this.didSelectRemove.bind(this)}/>
-					}
+			<div style={{maxHeight:"40px",...this.props.style,backgroundColor:"transparent",color:"#313131",display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"stretch",margin:0,padding:"10px",border:"none",borderBottom:"1px solid #eae9e1"}}>
+				<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"stretch",padding:"1%",marginLeft:"2%"}}>
+					<input type="text" defaultValue={label} style={{fontSize:"1.4em",color:"#1bd4a5",backgroundColor:"transparent",border:"none",outline:"none"}}/>
+					<span style={{fontSize:"1.1em",color:"#cbc7b4"}} onMouseOver={this.didHoverFileName.bind(this)}>{name}</span>
 				</span>
 			</div>
 		)

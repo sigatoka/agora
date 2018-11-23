@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 // Actions
 import {
-	addFiles
+	addFiles,
+	loadLibrary
 } from '../actions/FileActions';
 
 const ACCEPTED_FORMATS = ['video/mp4','video/x-m4v','.mkv','video/*'];
@@ -38,11 +39,11 @@ class VideoView extends React.Component {
 
 	render() {
 		return (
-			<div style={{...this.props.style,padding:"1%",textAlign:"center"}}>
-				<Dropzone multiple accept={ACCEPTED_FORMATS.join(',')} onDrop={this.didDropFiles.bind(this)} style={{width:"100%",maxHeight:"500px",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"12px"}}>{this.renderDropLabel}</Dropzone>
+			<div style={{...this.props.style,padding:"3vw 2vw",textAlign:"center"}}>
+				<Dropzone multiple accept={ACCEPTED_FORMATS.join(',')} onDrop={this.didDropFiles.bind(this)} style={{width:"100%",maxHeight:"500px",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"12px",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
 			</div>
 		)
 	}
 }
 
-export default connect(null, {addFiles})(VideoView);
+export default connect(null, {addFiles,loadLibrary})(VideoView);
