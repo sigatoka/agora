@@ -38,7 +38,7 @@ export const addFiles = files => dispatch => {
 export const convertFiles = files => dispatch => {
 	// Removed completed or in progress
 	files = files.filter((file) => {
-		return !(file.complete || file.progress > 0);
+		return !(file.complete || file.progress > 0 || file.output === file.format);
 	});
 	// Begin conversion
 	ipcRenderer.send('convert:start', files);

@@ -9,7 +9,7 @@ import ConversionView from './ConversionView';
 import {
 	loadLibrary
 } from '../actions/LibraryActions';
-
+// State mapping
 function mapStateToProps({ library }) {
 	return {library};
 }

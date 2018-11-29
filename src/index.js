@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './reducers/index';
 // CSS
@@ -24,7 +24,7 @@ const linkSelectedStyle = {
 
 const App = (
 	<Provider store={store}>
-		<BrowserRouter basepath="/">
+		<Router basepath="/" /*history={}*/>
 			<div style={{height:"100%",width:"100%",display:"flex",flexDirection:"column",justifyContent:"space-between",alignItems:"stretch",flexWrap:"nowrap",margin:0,padding:0}}>
 				<Route>
 					<nav style={{flex:"none",height:"50px",border:"none",boxShadow:"rgba(0,0,0,0.08) 0px 1px 4px 0px",display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"flex-end",alignContent:"stretch",flexWrap:"nowrap",margin:0,padding:0}}>
@@ -39,7 +39,7 @@ const App = (
 				</Route>
 				<LibraryView style={{flex:"5 10"}}/>
 			</div>
-		</BrowserRouter>
+		</Router>
 	</Provider>
 )
 

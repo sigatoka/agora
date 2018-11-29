@@ -99,9 +99,9 @@ export default class TaskListItem extends React.Component {
 					<TaskListItemState progress={progress} completed={complete}/>
 					<span style={{flex:"none",alignSelf:"stretch",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"stretch",padding:"1%",marginLeft:"2%"}}>
 						<input type="text" defaultValue={label} style={{fontSize:"1.4em",color:"#1bd4a5",backgroundColor:"transparent",border:"none",outline:"none"}}/>
-						<span style={{fontSize:"1.1em",color:"#cbc7b4"}} onMouseOver={this.didHoverFileName.bind(this)}>{name}</span>
+						<span style={{fontSize:"1.1em",color:"#cbc7b4",overflow:"hidden"}} onMouseOver={this.didHoverFileName.bind(this)}>{name}</span>
 					</span>
-					<span style={{fontSize:"1.2em"}}>{progress*100}%</span>
+					<span style={{fontSize:"1.2em"}}>{Math.floor(progress)}%</span>
 				</span>
 				<span style={{flex:"10 3",padding:"0 1%",margin:0,display:"flex",flexDirection:"row",justifyContent:"center",alignItems:"stretch"}}>
 					<span style={{width:"60px",backgroundColor:"#eae9e1",color:"#cbc7b4",outline:"none",border:"none",fontSize:"0.9em",padding:"0px 18px",marginRight:"5px",borderRadius:"5px",textAlign:"center",verticalAlign:"center",display:"flex",justifyContent:"center",alignItems:"center"}}>{format.toUpperCase()}</span>
