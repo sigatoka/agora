@@ -11,6 +11,12 @@ const defaultOptions = {
 	}
 }
 
+export interface TaskStateProps {
+  progress: number;
+  stopped?: boolean;
+  paused?: boolean;
+}
+
 export default class TaskListItemState extends React.Component {
 
     state = {
