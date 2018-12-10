@@ -5,6 +5,9 @@ const _ = require('lodash');
 const fs = require('fs');
 const _path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
+const CONFIG = require('./config.js');
+// Set the path to ffmpeg packaged binary
+ffmpeg.setFfmpegPath(CONFIG.ffmpegPath);
 // Main Window Reference
 let mainWindow = null;
 
@@ -32,9 +35,9 @@ app.on('ready', () => {
 		{
 			label:'Files',
 			submenu:[
-				{label:'Select'},
-				{label:'Convert'},
-				{label:'Settings'}
+				{label:'Add Files'},
+				{label:"Clear List"},
+				{label:'Convert List'}
 			]
 		}
 	]);
@@ -42,15 +45,8 @@ app.on('ready', () => {
 	Menu.setApplicationMenu(menu);
 });
 
-ipcMain.on('library:load', (event, files) => {
-	const libraryPath = _path.join(__dirname, 'library');
-	fs.readdir(libraryPath, (err, files) => {
-		mainWindow.webContents.send('library:files', files);
-	});
-});
-
 /**
- * @brief Get File Metadata
+ * @name Get File Metadata
  * @desc Retrieves metadata for a list of files
  * @param event <object> IPC event data
  * @param files <array> List of files
@@ -73,7 +69,7 @@ ipcMain.on('files:added', (event, files) => {
 });
 
 /**
- * @brief Convert Files
+ * @name Convert Files
  * @desc Iterates all files and passes to ffmpeg for conversion.
  * @param event <object> IPC event data
  * @param files <array> List of files for conversion
@@ -96,7 +92,7 @@ ipcMain.on('convert:start', (event, files) => {
 });
 
 /**
- * @brief Show File
+ * @name Show File
  * @desc Opens the path to file.
  * @param event <object> IPC event data
  * @param outputPath <string> Path to file

@@ -1,5 +1,5 @@
 import React from 'react';
-import { object } from 'prop-types';
+import { shape, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { Transition } from 'react-spring'
 // Components
@@ -17,18 +17,29 @@ function mapStateToProps({ files }) {
 	return { files };
 }
 
-class TaskList extends React.Component {
+export interface TaskProps {
+	hash: string;
+	name: string;
+	label: string;
+	format: string;
+	output: string;
+	progress: number;
+	onChange(e: MouseEvent<HTMLElement>): void;
+	didSelectShow: typeof Function;
+	didSelectRemove: typeof Function;
+}
+
+class TaskList extends React.Component<TaskProps> {
 
 	static defaultProps = {
-		files:{}
+
 	}
 
-	static propTypes = {
-		files:object
-	}
-
-	didChangeValues(video) {
-		this.props.updateFile(video);
+	didChangeValues(fileHash, nextValues) {
+		let file = this.props.files[fileHash];
+		if (!file) return;
+		Object.keys(nextValues).forEach(key => file[key] = nextValues[key]);
+		this.props.updateFile(file);
 	}
 
 	didSelectShowInFolder(hash) {
@@ -49,8 +60,8 @@ class TaskList extends React.Component {
 		});
 
 		return (
-			<div style={{flex:"10 5",...this.props.style,padding:"0.2% 0px",overflowX:"hidden",overflowY:"auto"}}>
-				<Transition keys={keys} from={{opacity:0,height:0,padding:0}} enter={{opacity:1,height:40,padding:10}} leave={{opacity:0,height:0,pointerEvents:'none',padding:0}}>
+			<div style={{flex:"10 5",...this.props.style,padding:"0px 3vmin",overflowX:"hidden",overflowY:"auto"}}>
+				<Transition keys={keys} from={{opacity:0,height:0,padding:0}} enter={{opacity:1,height:60,padding:10}} leave={{opacity:0,height:0,pointerEvents:'none',padding:0}}>
 					{data.map(asset => styles =>
 						<TaskListItem
 							style={styles}

@@ -1,10 +1,24 @@
 # Agora
 Simple File Conversion Application
 
-## Usage
-This project is the source code for the Agora application. If you'd like to build from source, make sure you have NodeJS installed and complete the following instructions.
+Built with Electron and React to interface with the common ffMpeg package.
 
-Install dependencies via NPM;
+## Usage
+The following project is the source code for the Agora application. If you'd like to build from source, make sure you have NodeJS and NPM installed then run the following commands in your command line.
+
+### Install dependencies via NPM;
 ```
 npm install
 ```
+
+### Build React;
+```
+npm start
+```
+
+~Open another command line in the current directory~
+
+### Start Electron
+```
+npm run-script electron
+``` 

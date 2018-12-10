@@ -4,6 +4,7 @@ const fs = require('fs');
 
 const nodeModules = {};
 
+// Attach Node modules into our React application
 fs.readdirSync('node_modules').filter(function(x) {
 	return ['.bin'].indexOf(x) === -1;
 }).forEach(function(mod) {
@@ -13,16 +14,16 @@ fs.readdirSync('node_modules').filter(function(x) {
 module.exports = {
 	externals: nodeModules,
 	entry: [
-		'./src/index.js'
+		'./src/App.js'
 	],
 	target: 'node',
 	output: {
 		path: __dirname,
-		publicPath: '/',
+		publicPath: '/public',
 		filename: 'bundle.js'
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				exclude: [
 					/node_modules/,
@@ -33,20 +34,13 @@ module.exports = {
 					presets: ['react', 'es2015', 'stage-1']
 				}
 			}, {
-				test: /\.css$/,
-				loader: 'style-loader'
-			}, {
-				test: /\.css$/,
-				loader: 'css-loader',
-				query: {
-					modules: true,
-					localIdentName: '[name]_[local]_[hash:base64:4]'
-				}
+				test: /\.(s*)css$/,
+				use: ['style-loader','css-loader','sass-loader']
 			}
 		]
 	},
 	resolve: {
-		extensions: ['.js', '.jsx']
+		extensions: ['.js','.jsx','.ts','.tsx']
 	},
 	devServer: {
 		historyApiFallback: true,

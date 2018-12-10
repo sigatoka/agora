@@ -8,7 +8,17 @@ import {
 	loadLibrary
 } from '../actions/FileActions';
 
-const ACCEPTED_FORMATS = ['video/mp4','video/x-m4v','.mkv','video/*'];
+const ACCEPTED_FORMATS = ['video/mp4','video/x-m4v','.mkv','video/*'].join(',');
+
+const containerStyle = {
+	height:"100%",
+	fontSize:"3vmax",
+	display:"flex",
+	flexDirection:"row",
+	justifyContent:"space-around",
+	alignItems:"center",
+	textAlign:"center"
+}
 
 class VideoView extends React.Component {
 
@@ -29,18 +39,18 @@ class VideoView extends React.Component {
 
 	renderDropLabel({ isDragActive, isDragReject }) {
 		if (isDragActive) {
-			return <h4>Drop files to get started</h4>
+			return <div style={containerStyle}><span>Go ahead...<br/>drop it!</span><span>Click me to select<br/>files image</span></div>
 		} else if (isDragReject) {
-			return <h4>Oops... We can't accept that file!</h4>
+			return <div style={containerStyle}><span>Oops... We can't accept that file!</span><span>Click me to select<br/>files image</span></div>
 		} else {
-			return <h4>Drag and drop,<br/>or click and select<br/>files to get started</h4>
+			return <div style={containerStyle}><span>Drag and drop,<br/>or click to select<br/>files to get started</span><span>Click me to select<br/>files image</span></div>
 		}
 	}
 
 	render() {
 		return (
-			<div style={{...this.props.style,padding:"3vw 2vw",textAlign:"center"}}>
-				<Dropzone multiple accept={ACCEPTED_FORMATS.join(',')} onDrop={this.didDropFiles.bind(this)} style={{width:"100%",maxHeight:"500px",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"12px",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
+			<div style={{...this.props.style,padding:"3vmin"}}>
+				<Dropzone multiple accept={ACCEPTED_FORMATS} onDrop={this.didDropFiles.bind(this)} style={{height:"100%",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"4vmin",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
 			</div>
 		)
 	}

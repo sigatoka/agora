@@ -5,23 +5,8 @@ import {
 	UPDATE_FILE,
 	ADD_FILES,
 	REMOVE_FILE,
-	REMOVE_ALL_FILES,
-	CONVERT_PROGRESS,
-	CONVERT_COMPLETE
+	REMOVE_ALL_FILES
 } from '../actions/types';
-// Interface
-interface FileProps {
-	hash: string,
-	label: string,
-	name: string,
-	path: string,
-	directory: string,
-	type: string,
-	format: string,
-	output: string,
-	complete: boolean,
-	progress: number
-}
 // Globals
 const INITIAL_STATE = {
 	"fnjasfnsjii": {
@@ -32,7 +17,6 @@ const INITIAL_STATE = {
 		directory:"/User/",
 		type:"movie",
 		format:"mp4",
-		output:"",
 		complete:false,
 		progress:0
 	},
@@ -44,7 +28,6 @@ const INITIAL_STATE = {
 		directory:"/User/",
 		type:"movie",
 		format:"mp4",
-		output:"",
 		complete:false,
 		progress:23
 	}
@@ -61,10 +44,6 @@ export default (state = INITIAL_STATE, action) => {
 			return _.omit(state, action.payload[KEY_ARGUMENT_ID]);
 		case REMOVE_ALL_FILES:
 			return INITIAL_STATE;
-		case CONVERT_PROGRESS:
-			return { ...state, [action.payload[KEY_ARGUMENT_ID]]: action.payload };
-		case CONVERT_COMPLETE:
-			return { ...state, [action.payload[KEY_ARGUMENT_ID]]: { ...action.payload, complete:true } };
 		default:
 			return state;
 	}
