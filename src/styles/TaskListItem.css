@@ -73,7 +73,38 @@ span.name {
 	align-items:center;
 }
 
-.format {
+span.format {
+	background-color: transparent;
+	border: 1px solid rgba(142,141,138,0.2);
+	padding: 0;
+	margin:0em 0.2em;
+	border-radius: 0.5em;
+	
+}
+
+span.format span {
+	color:#8E8D8A;
+	text-transform: uppercase;
+	padding: 1em 0em 1em 1.2em;
+}
+
+span.format button {
+	color:#8E8D8A;
+	background: none;
+	box-shadow: none;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	width: inherit;
+	height: inherit;
+	font-size: 0.8em;
+	padding: 1em;
+	margin:0;
+	border-radius: 0;
+}
+
+select.format {
+	width:60px;
 	width:60px;
 	height: 100%;
 	color:#cbc7b4;
@@ -84,17 +115,6 @@ span.name {
 	border: none;
 	outline: none;
 	margin:0px 2.5px;
-}
-
-label.format {
-	vertical-align:center;
-	display:flex;
-	justify-content:center;
-	align-items:center;
-}
-
-select.format {
-	width:60px;
 }
 
 .control-container {
