@@ -2,48 +2,46 @@ import React from 'react';
 import { connect } from 'react-redux';
 // Components
 import Dropzone from 'react-dropzone';
+// CSS
+import '../styles/SelectionView.css';
 // Actions
 import {
-	addFiles,
-	loadLibrary
+	addFiles
 } from '../actions/FileActions';
 
-const ACCEPTED_FORMATS = ['video/mp4','video/x-m4v','.mkv','video/*'];
+const ACCEPTED_FORMATS = ['video/mp4','video/x-m4v','.mkv','video/*'].join(',');
+
+const mapDispatchToProps = {
+	addFiles
+}
 
 class VideoView extends React.Component {
 
 	didDropFiles(acceptedFiles, rejectedFiles) {
-
-		const files = acceptedFiles.map(({ name, path, size, type }, idx) => {
-
-			const parts = name.match(/\.(\w*)/gi);
-			const format = parts[parts.length-1].replace(/\./,'');
-			type = type.split(/\//gi)[0];
-			
-			return { name, path, size, format, type };
-		});
-
-		if (files.length <= 0) return;
-		this.props.addFiles(files);
+		const paths = acceptedFiles.map(({ path }) => path);
+		if (paths.length <= 0) return;
+		this.props.addFiles(paths);
 	}
 
 	renderDropLabel({ isDragActive, isDragReject }) {
+		// Yeah wow!
+		// What is this shit...?
 		if (isDragActive) {
-			return <h4>Drop files to get started</h4>
+			return <div className="container"><span>Go ahead...<br/>drop it!</span><span>Click me to select<br/>files image</span></div>
 		} else if (isDragReject) {
-			return <h4>Oops... We can't accept that file!</h4>
+			return <div className="container"><span>Oops... We can't accept that file!</span><span>Click me to select<br/>files image</span></div>
 		} else {
-			return <h4>Drag and drop,<br/>or click and select<br/>files to get started</h4>
+			return <div className="container"><span>Drag and drop,<br/>or click to select<br/>files to get started</span><span>Click me to select<br/>files image</span></div>
 		}
 	}
 
 	render() {
 		return (
-			<div style={{...this.props.style,padding:"3vw 2vw",textAlign:"center"}}>
-				<Dropzone multiple accept={ACCEPTED_FORMATS.join(',')} onDrop={this.didDropFiles.bind(this)} style={{width:"100%",maxHeight:"500px",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"12px",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
+			<div style={{...this.props.style,padding:"3vmin"}}>
+				<Dropzone multiple accept={ACCEPTED_FORMATS} onDrop={this.didDropFiles.bind(this)} style={{height:"100%",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"4vmin",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
 			</div>
 		)
 	}
 }
 
-export default connect(null, {addFiles,loadLibrary})(VideoView);
+export default connect(null, mapDispatchToProps)(VideoView);

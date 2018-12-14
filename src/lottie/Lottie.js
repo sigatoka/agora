@@ -34,7 +34,7 @@ export default class Lottie extends React.Component {
 
     this.anim.addEventListener('DOMLoaded', (event) => {
       if ('function' === typeof this.props.onReady) {
-        this.props.onReady(event);
+        this.props.onReady(this.anim);
       } else {
         console.log("Ready", event)
       }
@@ -49,7 +49,7 @@ export default class Lottie extends React.Component {
     }
     this.anim.onComplete = (prop) => {
       if ('function' === typeof this.props.onEnd) {
-        this.props.onEnd(event);
+        this.props.onEnd(this.anim);
       } else {
         console.log("Complete",prop);
       }
