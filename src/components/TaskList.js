@@ -1,62 +1,90 @@
 import React from 'react';
-import { shape, string } from 'prop-types';
+import { shape, string, number } from 'prop-types';
 import { connect } from 'react-redux';
 import { Transition } from 'react-spring'
+import _ from 'lodash';
 // Components
-import TaskListItem from '../components/TaskListItem';
+import TaskListItem, { PropTypes as FileProps } from '../components/TaskListItem';
 // Actions
 import {
 	updateFile,
-	convertFiles,
 	removeFile,
 	removeAllFiles,
 	showInFolder
 } from '../actions/FileActions';
 
-function mapStateToProps({ files }) {
-	return { files };
+import {
+	addTask,
+	removeTask
+} from '../actions/TaskActions';
+
+function mapStateToProps({ files, tasks }) {
+	return { files, tasks };
 }
 
-export interface TaskProps {
-	hash: string;
-	name: string;
-	label: string;
-	format: string;
-	output: string;
-	progress: number;
-	onChange(e: MouseEvent<HTMLElement>): void;
-	didSelectShow: typeof Function;
-	didSelectRemove: typeof Function;
+const mapDispatchToProps = {
+	updateFile,
+	removeFile,
+	removeAllFiles,
+	showInFolder,
+	addTask,
+	removeTask
 }
 
-class TaskList extends React.Component<TaskProps> {
+class TaskList extends React.Component<FileProps> {
 
-	static defaultProps = {
+	didChangeFormat(atKey, toFormat) {
 
-	}
-
-	didChangeValues(fileHash, nextValues) {
-		let file = this.props.files[fileHash];
+		let file = this.props.files[atKey];
 		if (!file) return;
-		Object.keys(nextValues).forEach(key => file[key] = nextValues[key]);
+		if (!(file.outputs instanceof Array)) file.outputs = [];
+		const outputPath = file.path.replace(file.format, toFormat);
+		// Modify output array
+		if (file.outputs.indexOf(outputPath) < 0) {
+			file.outputs.push(outputPath);
+			this.props.addTask({
+				_id: outputPath,
+				name: file.title,
+				source: atKey,
+				input: file.path,
+				output: file.path.replace(file.format,toFormat),
+				format: toFormat,
+				progress: 0,
+				complete: false
+			});
+		} else {
+			file.outputs.splice(file.outputs.indexOf(outputPath), 1);
+			this.props.removeTask(outputPath);
+		}
+
 		this.props.updateFile(file);
 	}
 
-	didSelectShowInFolder(hash) {
-		const { path } = this.props.files[hash];
-		this.props.showInFolder(path);
+	didSelectShowInFolder(atKey) {
+		const { path } = this.props.files[atKey];
+		if ('string' === typeof path && path !== "")
+			this.props.showInFolder(path);
 	}
 
-	didSelectRemove(hash) {
-		const file = this.props.files[hash];
+	didSelectReset(atKey) {
+		let file = this.props.files[atKey];
+		(file.outputs||[]).forEach(task => this.props.removeTask(task));
+		file.outputs = [];
+		this.props.updateFile(file);
+	}
+
+	didSelectRemove(atKey) {
+		const file = this.props.files[atKey];
+		(file.outputs||[]).forEach(task => this.props.removeTask(task));
 		this.props.removeFile(file);
 	}
 
 	render() {
 
 		const keys = Object.keys(this.props.files);
-		const data = keys.map((key) => {
-			return this.props.files[key];
+		const data = keys.map(atKey => {
+			// Hacked this mapping together, requires a much better implementation!
+			return { ...this.props.files[atKey], outputs:Object.values(this.props.tasks).filter(task => { return (this.props.files[atKey].outputs||[]).indexOf(task._id) >= 0} ) };
 		});
 
 		return (
@@ -65,20 +93,16 @@ class TaskList extends React.Component<TaskProps> {
 					{data.map(asset => styles =>
 						<TaskListItem
 							style={styles}
-							key={asset.hash}
+							hash={asset._id}
 							onShow={this.didSelectShowInFolder.bind(this)}
-							onChange={this.didChangeValues.bind(this)}
+							onChange={this.didChangeFormat.bind(this)}
+							onReset={this.didSelectReset.bind(this)}
 							onRemove={this.didSelectRemove.bind(this)}
-							hash={asset.hash}
-							label={asset.label}
+							id={asset._id}
+							title={asset.title}
 							name={asset.name}
-							path={asset.path}
-							directory={asset.directory}
-							type={asset.type}
-							output={asset.output}
+							outputs={asset.outputs||[]}
 							format={asset.format}
-							complete={asset.complete}
-							progress={asset.progress}
 						/>
 					)}
 				</Transition>
@@ -87,4 +111,4 @@ class TaskList extends React.Component<TaskProps> {
 	}
 }
 
-export default connect(mapStateToProps, {updateFile,convertFiles,removeFile,removeAllFiles,showInFolder})(TaskList);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

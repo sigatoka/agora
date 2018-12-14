@@ -4,6 +4,8 @@ import _ from 'lodash';
 import { string, number } from 'prop-types';
 // Components
 import TaskListItemState from './TaskListItemState';
+// CSS
+import '../styles/TaskListItem.css';
 // Formats
 const VIDEO_FORMATS = [
   {value:'avi',label:'AVI'},
@@ -13,17 +15,20 @@ const VIDEO_FORMATS = [
   {value:'mpeg',label:'MPEG'},
   {value:'ogv',label:'OGV'}
 ]
-// CSS
-import '../styles/TaskListItem.css';
 
 type VideoFormats = 'avi' | 'm4v' | 'mov' | 'mp4' | 'mpeg' | 'ogv';
 
-type PropTypes = {
+type TaskProps = {
+	_id: string;
+	output: FileFormats;
+}
+
+export type PropTypes = {
 	id: string;
 	name: string;
 	title: string;
 	format: VideoFormats;
-	outputs: array<VideoFormats>;
+	outputs: array<TaskProps>;
 	onChange(id: string, values: object): void;
 	onShow(id: string): void;
 	onReset(id: string): void;
@@ -52,15 +57,15 @@ export default function TaskListItem(props: PropTypes) {
 			<span className="task-label">
 				<input className="name" type="text" defaultValue={title}/>
 				<span className="task-title">
-					<label className="">{format.toUpperCase()}</label>
+					<label className="">{(format||'').toUpperCase()}</label>
 					<span className="name">{name}</span>
 				</span>
 			</span>
 			<span className="format-container">
 				{outputs.map((output, idx) => 
-					<span key={idx} className="format"><span>{output.format}</span><button className="format-control" onClick={event => onChange(id, {output:event.target.value.toLowerCase()})} value={output.format}>X</button></span>
+					<span key={idx} className="format"><span>{output.format}</span><button className="format-control" onClick={event => onChange(id, event.target.value.toLowerCase())} value={output.format}>X</button></span>
 				)}
-				<select className="format" defaultValue={false} placeholder="select" onChange={event => onChange(id, {output:event.target.value.toLowerCase()})}>
+				<select className="format" defaultValue={false} placeholder="select" onChange={event => onChange(id, event.target.value.toLowerCase())}>
 					{VIDEO_FORMATS.map(FORMAT => {
 						if (FORMAT.value !== format && _.findIndex(outputs,['format',FORMAT.value]) < 0) return <option key={FORMAT.value} value={FORMAT.value}>{FORMAT.label}</option>;
 					})}

@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 
 // Reducers
 import fileReducer from './FileReducer';
+import taskReducer from './TaskReducer';
 
 /*
  * Root Reducer
@@ -11,7 +12,8 @@ import fileReducer from './FileReducer';
  * @note Combine reducer is not reuqired here but is used anyway for future features
  */
 const rootReducer = combineReducers({
-	files:fileReducer
+	files:fileReducer,
+	tasks:taskReducer
 });
 
 /*

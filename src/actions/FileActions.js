@@ -1,6 +1,6 @@
 // Modules
 import { ipcRenderer } from 'electron';
-import createHash from 'create-hash';
+//import createHash from 'create-hash';
 // Types
 import {
 	UPDATE_FILE,
@@ -21,44 +21,26 @@ export const updateFile = file => dispatch => dispatch({ type:UPDATE_FILE,payloa
  * @desc Merges the provided file at key 'hash'
  * @param {Array<Object>} files - Array of file objects
  */
-export const addFiles = files => dispatch => {
-	// Process files
-	files = files.map(({ name, path, size, type, format }) => {
-		const label = labelFromFileName(name);
-		const hash = fileHashFromString(path);
-		const directory = path.replace(name,'');
-		return { hash, label, name, path, directory, size, type, format, complete:false, progress:0 };
-	});
-	// Notify of files
-	ipcRenderer.send('files:added', files);
+export const addFiles = paths => dispatch => {
+	// Load files for given paths
+	ipcRenderer.send('files:added', paths);
 	// Handle file metadata from the main process
 	ipcRenderer.on('files:meta', (event, filesWithMeta) => {
+
+		filesWithMeta = filesWithMeta.map(meta => {
+			meta.name = nameFromPath(meta.path);
+			meta.title = titleFromFileName(meta.name);
+			meta._id = fileHashFromString(meta.path);
+			meta.directory = meta.path.replace(meta.name,'');
+			meta.format = extensionFromFilename(meta.name);
+			return meta;
+		});
+
 		dispatch({type:ADD_FILES,payload:filesWithMeta});
 	});
-}
 
-/**
- * @name Convert File
- * @desc Sends the file too be converted in the main process
- * @param {array<object>} files - Array of configured file objects.
- */
-export const convertFiles = files => dispatch => {
-	// Removed completed or in progress
-	files = files.filter((file) => {
-		return !(file.complete || file.progress > 0 || file.output === file.format || file.output === '');
-	});
-	// Begin conversion
-	ipcRenderer.send('convert:start', files);
-	// Observe progress
-	ipcRenderer.on('convert:progress', (event, file) => {
-		//console.log(Math.floor(file.progress)+"%")
-		dispatch({ type:UPDATE_FILE, payload:file });
-	});
-	// Monitor completion
-	ipcRenderer.on('convert:end', (event, { file, outputPath }) => {
-		console.log("completed")
-		file.completed = true;
-		dispatch({ type:UPDATE_FILE, payload:file });
+	ipcRenderer.on('files:error', (event, error) => {
+		console.error(error);
 	});
 }
 
@@ -70,7 +52,7 @@ export const convertFiles = files => dispatch => {
 export const removeFile = file => dispatch => dispatch({ type:REMOVE_FILE, payload:file });
 
 /**
- * @name Remove All Files
+ * @name Remove All
  * @desc Removes all files in the store.
  */
 export const removeAllFiles = () => dispatch => dispatch({ type:REMOVE_ALL_FILES });
@@ -82,10 +64,21 @@ export const removeAllFiles = () => dispatch => dispatch({ type:REMOVE_ALL_FILES
  */
 export const showInFolder = (directoryPath) => dispatch => ipcRenderer.send('file:show', directoryPath);
 
-function labelFromFileName(name) {
+function nameFromPath(path) {
+	const components = path.split('/');
+	return components[components.length-1];
+}
+
+function extensionFromFilename(fileName) {
+	const components = fileName.split('.');
+	return components[components.length-1];
+}
+
+function titleFromFileName(name) {
 	return name.split(/\./gi)[0];
 }
 
 function fileHashFromString(str) {
-	return createHash('sha256').update(str).digest('hex');
+	return str;
+	//return createHash('sha256').update(str).digest('hex');
 }

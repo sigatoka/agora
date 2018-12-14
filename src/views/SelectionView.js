@@ -2,48 +2,36 @@ import React from 'react';
 import { connect } from 'react-redux';
 // Components
 import Dropzone from 'react-dropzone';
+// CSS
+import '../styles/SelectionView.css';
 // Actions
 import {
-	addFiles,
-	loadLibrary
+	addFiles
 } from '../actions/FileActions';
 
 const ACCEPTED_FORMATS = ['video/mp4','video/x-m4v','.mkv','video/*'].join(',');
 
-const containerStyle = {
-	height:"100%",
-	fontSize:"3vmax",
-	display:"flex",
-	flexDirection:"row",
-	justifyContent:"space-around",
-	alignItems:"center",
-	textAlign:"center"
+const mapDispatchToProps = {
+	addFiles
 }
 
 class VideoView extends React.Component {
 
 	didDropFiles(acceptedFiles, rejectedFiles) {
-
-		const files = acceptedFiles.map(({ name, path, size, type }, idx) => {
-
-			const parts = name.match(/\.(\w*)/gi);
-			const format = parts[parts.length-1].replace(/\./,'');
-			type = type.split(/\//gi)[0];
-			
-			return { name, path, size, format, type };
-		});
-
-		if (files.length <= 0) return;
-		this.props.addFiles(files);
+		const paths = acceptedFiles.map(({ path }) => path);
+		if (paths.length <= 0) return;
+		this.props.addFiles(paths);
 	}
 
 	renderDropLabel({ isDragActive, isDragReject }) {
+		// Yeah wow!
+		// What is this shit...?
 		if (isDragActive) {
-			return <div style={containerStyle}><span>Go ahead...<br/>drop it!</span><span>Click me to select<br/>files image</span></div>
+			return <div className="container"><span>Go ahead...<br/>drop it!</span><span>Click me to select<br/>files image</span></div>
 		} else if (isDragReject) {
-			return <div style={containerStyle}><span>Oops... We can't accept that file!</span><span>Click me to select<br/>files image</span></div>
+			return <div className="container"><span>Oops... We can't accept that file!</span><span>Click me to select<br/>files image</span></div>
 		} else {
-			return <div style={containerStyle}><span>Drag and drop,<br/>or click to select<br/>files to get started</span><span>Click me to select<br/>files image</span></div>
+			return <div className="container"><span>Drag and drop,<br/>or click to select<br/>files to get started</span><span>Click me to select<br/>files image</span></div>
 		}
 	}
 
@@ -56,4 +44,4 @@ class VideoView extends React.Component {
 	}
 }
 
-export default connect(null, {addFiles,loadLibrary})(VideoView);
+export default connect(null, mapDispatchToProps)(VideoView);
