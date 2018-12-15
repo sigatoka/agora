@@ -5,6 +5,10 @@ const _ = require('lodash');
 const fs = require('fs');
 const _path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
+const CONFIG = require('./config.js');
+// Set the path to packaged binaries
+ffmpeg.setFfmpegPath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg');
+ffmpeg.setFfprobePath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffprobe-static/bin/darwin/x64/ffprobe');
 // Main Window Reference
 let mainWindow = null;
 
@@ -21,7 +25,7 @@ app.on('ready', () => {
 
 	mainWindow.webContents.openDevTools()
 	// Load root display
-	mainWindow.loadURL(`file://${__dirname}/public/index.html`);
+	mainWindow.loadURL(`file://${__dirname}/build/index.html`);
 	// Handle closed window
 	mainWindow.on('closed', () => {
 		// Dereference the window object
@@ -30,11 +34,15 @@ app.on('ready', () => {
 
 	const menu = Menu.buildFromTemplate([
 		{
+			submenu:[
+				{label:'Settings'}
+			]
+		}, {
 			label:'Files',
 			submenu:[
-				{label:'Select'},
-				{label:'Convert'},
-				{label:'Settings'}
+				{label:'Add Files'},
+				{label:"Clear List"},
+				{label:'Convert List'}
 			]
 		}
 	]);
@@ -42,65 +50,72 @@ app.on('ready', () => {
 	Menu.setApplicationMenu(menu);
 });
 
-ipcMain.on('library:load', (event, files) => {
-	const libraryPath = _path.join(__dirname, 'library');
-	fs.readdir(libraryPath, (err, files) => {
-		mainWindow.webContents.send('library:files', files);
-	});
-});
-
 /**
- * @brief Get File Metadata
+ * @name Get File Metadata
  * @desc Retrieves metadata for a list of files
- * @param event <object> IPC event data
- * @param files <array> List of files
+ * @param {object} event - IPC event data
+ * @param {array<string>} paths - Array of file paths
+ * @note Extract file logic into seperate ffmpeg file module
  */
-ipcMain.on('files:added', (event, files) => {
-
-	const promises = files.map(({ hash, label, name, path, directory, size, type, format, output, completed, progress }) => {
+ipcMain.on('files:added', (event, paths) => {
+	
+	const promises = paths.map(path => {
+		// This promise creation an it's contents
+		// should be in it's own file module
 		return new Promise((resolve, reject) => {
-			ffmpeg.ffprobe(path, (err, { format:{ duration } }) => {
-				resolve({ hash, label, name, path, directory, size, type, format, output, duration, completed, progress });
-			});
+			// Validate and cleanse path
+			if ('string' !== typeof path || path === '') {
+				if ('string' !== typeof path) path = "ILLEGAL";
+				reject("Invalid file path '"+path+"'");
+			} else {
+				ffmpeg.ffprobe(path, (err, { format }) => {
+					if (err) {
+						reject("Load file at path '"+path+"' failed!");
+					} else {
+						resolve({ path:format.filename, duration:format.duration });
+					}
+				});
+			}
 		});
 	});
 
-	Promise.all(promises).then((results) => {
+	Promise.all(promises).then(results => {
 		mainWindow.webContents.send('files:meta', results);
-	}).catch((error) => {
-		console.log(colors.red(error));
+	}).catch(error => {
+		mainWindow.webContents.send('files:error', error);
 	});
 });
 
 /**
- * @brief Convert Files
+ * @name Convert Files
  * @desc Iterates all files and passes to ffmpeg for conversion.
- * @param event <object> IPC event data
- * @param files <array> List of files for conversion
- * @note Progress percentage from ffmpeg might not be accurate
+ * @param {object} event - IPC event data
+ * @param {array<object>} tasks - Array of task objects
+ * @note Progress percentage from ffmpeg might not be accurate / Extract file logic into seperate ffmpeg file module
  */
-ipcMain.on('convert:start', (event, files) => {
+ipcMain.on('convert:start', (event, tasks) => {
 
-	_.each(files, (file) => {
+	_.each(tasks, task => {
 
-		const { hash, label, name, path, directory, size, type, format, output, duration } = file;
-		const outputPath = file.directory + name.replace(format, output);
+		const outputPath = task.output;
 
-		ffmpeg(path).on('progress', ({ percent }) => {
+		ffmpeg(task.input).on('progress', ({ percent }) => {
 			//console.log(progress);
-			mainWindow.webContents.send('convert:progress', { hash, label, name, path, directory, size, type, format, output, duration, progress:percent });
+			task.progress = percent;
+			mainWindow.webContents.send('convert:progress', task);
 		}).on('end', (stdout, stdder) => {
-			mainWindow.webContents.send('convert:end', { file, outputPath })
-		}).output(outputPath).run();
+			mainWindow.webContents.send('convert:end', task);
+		}).output(task.output).run();
 	});
 });
 
 /**
- * @brief Show File
- * @desc Opens the path to file.
- * @param event <object> IPC event data
- * @param outputPath <string> Path to file
+ * @name Show File
+ * @desc Opens the directory at file location.
+ * @param {object} event - IPC event data
+ * @param {string} fullPath - Full path to file
  */
-ipcMain.on('file:show', (event, outputPath) => {
-	shell.showItemInFolder(outputPath);
+ipcMain.on('file:show', (event, fullPath) => {
+	if ('string' !== typeof fullPath || fullPath.length === '') return;
+	shell.showItemInFolder(fullPath);
 });

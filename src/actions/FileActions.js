@@ -1,74 +1,84 @@
 // Modules
 import { ipcRenderer } from 'electron';
-import createHash from 'create-hash';
+//import createHash from 'create-hash';
 // Types
 import {
 	UPDATE_FILE,
 	ADD_FILES,
 	REMOVE_FILE,
-	REMOVE_ALL_FILES,
-	CONVERT_PROGRESS,
-	CONVERT_COMPLETE
+	REMOVE_ALL_FILES
 } from './types';
 
 /**
- * @brief Update File Data
- * @param file <object> File data object
+ * @name Update File
+ * @desc Overwrites the given file at key 'hash'
+ * @param {Object} file - File data object
  */
-export const updateFile = file => dispatch => {
-	dispatch({ type:UPDATE_FILE,payload:file });
-}
+export const updateFile = file => dispatch => dispatch({ type:UPDATE_FILE,payload:file });
 
-export const addFiles = files => dispatch => {
-	// Process files
-	files = files.map(({ name, path, size, type, format }) => {
-		const label = labelFromFileName(name);
-		const hash = fileHashFromString(path);
-		const directory = path.replace(name,'');
-		return { hash, label, name, path, directory, size, type, format, output:format, complete:false, progress:0 };
-	});
-	// Notify of files
-	ipcRenderer.send('files:added', files);
+/**
+ * @name Add File
+ * @desc Merges the provided file at key 'hash'
+ * @param {Array<Object>} files - Array of file objects
+ */
+export const addFiles = paths => dispatch => {
+	// Load files for given paths
+	ipcRenderer.send('files:added', paths);
 	// Handle file metadata from the main process
 	ipcRenderer.on('files:meta', (event, filesWithMeta) => {
+
+		filesWithMeta = filesWithMeta.map(meta => {
+			meta.name = nameFromPath(meta.path);
+			meta.title = titleFromFileName(meta.name);
+			meta._id = fileHashFromString(meta.path);
+			meta.directory = meta.path.replace(meta.name,'');
+			meta.format = extensionFromFilename(meta.name);
+			return meta;
+		});
+
 		dispatch({type:ADD_FILES,payload:filesWithMeta});
 	});
-}
 
-export const convertFiles = files => dispatch => {
-	// Removed completed or in progress
-	files = files.filter((file) => {
-		return !(file.complete || file.progress > 0);
-	});
-	// Begin conversion
-	ipcRenderer.send('convert:start', files);
-	// Observe progress
-	ipcRenderer.on('convert:progress', (event, file) => {
-		dispatch({ type:CONVERT_PROGRESS, payload:file });
-	});
-	// Monitor completion
-	ipcRenderer.on('convert:end', (event, { file, outputPath }) => {
-		dispatch({ type:CONVERT_COMPLETE, payload:file });
+	ipcRenderer.on('files:error', (event, error) => {
+		console.error(error);
 	});
 }
 
-export const removeFile = file => dispatch => {
-	dispatch({ type:REMOVE_FILE, payload:file });
+/**
+ * @name Remove File
+ * @desc Removes the file matching the specified 'hash' key.
+ * @param {object} file - File to remove.
+ */
+export const removeFile = file => dispatch => dispatch({ type:REMOVE_FILE, payload:file });
+
+/**
+ * @name Remove All
+ * @desc Removes all files in the store.
+ */
+export const removeAllFiles = () => dispatch => dispatch({ type:REMOVE_ALL_FILES });
+
+/**
+ * @name Show Directory
+ * @desc Notifies the main process to open the directory at the specified path.
+ * @param {string} directoryPath - Full path to the directory.
+ */
+export const showInFolder = (directoryPath) => dispatch => ipcRenderer.send('file:show', directoryPath);
+
+function nameFromPath(path) {
+	const components = path.split('/');
+	return components[components.length-1];
 }
 
-export const removeAllFiles = () => dispatch => {
-	dispatch({ type:REMOVE_ALL_FILES });
+function extensionFromFilename(fileName) {
+	const components = fileName.split('.');
+	return components[components.length-1];
 }
 
-export const showInFolder = ({ directory, name, format, output }) => dispatch => {
-	const outputPath = file.directory + name.replace(format, output);
-	ipcRenderer.send('file:show', outputPath);
-}
-
-function labelFromFileName(name) {
+function titleFromFileName(name) {
 	return name.split(/\./gi)[0];
 }
 
 function fileHashFromString(str) {
-	return createHash('sha256').update(str).digest('hex');
+	return str;
+	//return createHash('sha256').update(str).digest('hex');
 }
