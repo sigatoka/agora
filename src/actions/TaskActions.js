@@ -28,6 +28,8 @@ export const startTasks = tasks => dispatch => {
 	// Begin conversion
 	ipcRenderer.send('convert:start', tasks);
 	// Observe progress
+	// ! Not the right way to add listeners
+		// Causes a new listener to subscribe on each call
 	ipcRenderer.on('convert:progress', (event, task) => {
 		//console.log(Math.floor(file.progress)+"%")
 		dispatch({ type:TASK_PROGRESS, payload:task });

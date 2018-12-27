@@ -18,7 +18,7 @@ export interface StateTypes {
 	range: array<number>
 }
 
-export default class TaskListItemState extends React.Component<PropTypes, StateTypes> {
+export default class TaskListItemStatus extends React.Component<PropTypes, StateTypes> {
 
     state = {
     	progress:0,

@@ -1,3 +1,11 @@
+.tasks {
+	flex:10 2 auto;
+	padding: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	transition: max-height 0.3s ease-out;
+}
+
 .task-list-item {
 	background-color:transparent;
 	color:#313131;
@@ -74,7 +82,7 @@ span.name {
 }
 
 span.format {
-	background-color: transparent;
+	background-color:#f9f9f9;
 	border: 1px solid rgba(142,141,138,0.2);
 	padding: 0;
 	margin:0em 0.2em;

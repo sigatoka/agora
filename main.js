@@ -23,9 +23,9 @@ app.on('ready', () => {
 		//titleBarStyle:'hiddenInset'
 	});
 
-	mainWindow.webContents.openDevTools()
+	//mainWindow.webContents.openDevTools()
 	// Load root display
-	mainWindow.loadURL(`file://${__dirname}/build/index.html`);
+	mainWindow.loadURL(`http://localhost:9000`); // `file://${__dirname}/build/index.html`
 	// Handle closed window
 	mainWindow.on('closed', () => {
 		// Dereference the window object

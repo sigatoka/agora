@@ -1,9 +1,20 @@
-.container {
-	height:100%;
+section.selection {
+	flex: 10 10 auto;
+	align-self: stretch;
+	padding: 3vmin;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items: stretch;
+	align-content: stretch;
+}
+
+section .container {
 	font-size:3vmin;
 	display:flex;
 	flex-direction:row;
 	justify-content:space-around;
-	align-items:center;
+	align-items: center;
+	align-content: center;
 	text-align:center;
 }

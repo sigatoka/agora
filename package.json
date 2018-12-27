@@ -1,10 +1,11 @@
 {
   "name": "convert",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple File Conversion Application",
   "main": "main.js",
   "author": "Mitch Pierias <github.com/MitchPierias>",
   "private": false,
+  "homepage": "./",
   "keywords": [
     "Convert",
     "Conversion",
@@ -16,8 +17,8 @@
   ],
   "scripts": {
     "start": "electron .",
-    "start-dev":"webpack-dev-server",
-    "build": "webpack --mode production",
+    "start:dev": "webpack-dev-server --env development --progress",
+    "build": "webpack --env production",
     "dist": "electron-builder",
     "docs": "./node_modules/.bin/typedoc --out ./docs --mode modules"
   },
@@ -49,15 +50,16 @@
     "css-modules": "^0.3.0",
     "electron": "^3.0.11",
     "electron-builder": "^20.38.3",
+    "foreman": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.10.0",
     "react-scripts": "^2.1.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "typedoc": "^0.13.0",
-    "webpack": "^4.27.1",
+    "webpack": "^3.12.0",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.11.3"
   },
   "build": {
     "productName": "Agora",
@@ -92,7 +94,7 @@
         "!node_modules/ffprobe-static/bin/linux${/*}"
       ]
     },
-    "extends":null
+    "extends": null
   },
   "browserslist": [
     ">0.2%",
