@@ -29,17 +29,17 @@ class VideoView extends React.Component {
 		if (isDragActive) {
 			return <div className="container"><span>Go ahead...<br/>drop it!</span><span>Click me to select<br/>files image</span></div>
 		} else if (isDragReject) {
-			return <div className="container"><span>Oops... We can't accept that file!</span><span>Click me to select<br/>files image</span></div>
+			return <div className="container"><img alt="Oops... We can't accept that file!"/><span>Click me to select<br/>files image</span></div>
 		} else {
-			return <div className="container"><span>Drag and drop,<br/>or click to select<br/>files to get started</span><span>Click me to select<br/>files image</span></div>
+			return <div className="container"><img alt="Drag and drop files to get started"/><img alt="Click me to select files"/></div>
 		}
 	}
 
 	render() {
 		return (
-			<div style={{...this.props.style,padding:"3vmin"}}>
-				<Dropzone multiple accept={ACCEPTED_FORMATS} onDrop={this.didDropFiles.bind(this)} style={{height:"100%",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"4vmin",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
-			</div>
+			<section className="selection">
+				<Dropzone multiple accept={ACCEPTED_FORMATS} onDrop={this.didDropFiles.bind(this)} style={{flex:"1 1 100%",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"stretch",backgroundColor:"transparent",border:"2px dashed rgba(0,0,0,0.1)",borderRadius:"4vmin",color:"rgba(0,0,0,0.25)"}}>{this.renderDropLabel}</Dropzone>
+			</section>
 		)
 	}
 }

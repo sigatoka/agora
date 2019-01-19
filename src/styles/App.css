@@ -22,10 +22,24 @@ body {
 	font-size: 10px;
 	line-height:1.3;
 	font-weight:100;
+}
+
+div#root {
+	width: 100vw !important;
+	height: 100vh !important;
+	display:flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: stretch;
+	align-content: stretch;
+	flex-wrap: nowrap;
+	overflow:hidden;
+}
+
+.drag-region {
 	-ms-overflow-style: scrollbar;
 	-webkit-user-select: none;
 	-webkit-app-region:drag;
-	overflow:hidden;
 }
 /** Button window dragging fix **/
 input[type="submit"],
@@ -67,7 +81,7 @@ button:disabled {
 	color:#8E8D8A;
 	background: none;
 	box-shadow: none;
-	background-color: transparent;
+	background-color:#f9f9f9;
 	border: 1px solid rgba(142,141,138,0.2);
 	cursor:default;
 }

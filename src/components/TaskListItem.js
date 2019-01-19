@@ -1,9 +1,8 @@
 // Modules
 import React from 'react';
 import _ from 'lodash';
-import { string, number } from 'prop-types';
 // Components
-import TaskListItemState from './TaskListItemState';
+import TaskListItemStatus from './TaskListItemStatus';
 // CSS
 import '../styles/TaskListItem.css';
 // Formats
@@ -29,6 +28,7 @@ export type PropTypes = {
 	title: string;
 	format: VideoFormats;
 	outputs: array<TaskProps>;
+	onClick(): void;
 	onChange(id: string, values: object): void;
 	onShow(id: string): void;
 	onReset(id: string): void;
@@ -43,17 +43,18 @@ export default function TaskListItem(props: PropTypes) {
 		name,
 		format,
 		outputs,
+		onClick,
 		onReset,
 		onRemove,
 		onChange,
 		onShow
 	} = props;
 
-	const progress = (outputs.length === 0) ? 0 : outputs.reduce((sum, output) => sum+(output.progress||0)) / outputs.length;
+	const progress = (outputs.length === 0) ? 0 : (outputs.reduce((sum, output) => { return sum+(output.progress||0) }, 0) / outputs.length);
 
 	return (
-		<div className="task-list-item" data-js="TaskListItem" style={{...props.style}}>
-			<TaskListItemState progress={progress} complete={progress===100} range={[0,30]}/>
+		<div className="task-list-item" data-js="TaskListItem" style={{...props.style,padding:"12px 3vmin"}}>
+			<TaskListItemStatus progress={progress} onClick={onClick.bind(this)} clickable={outputs.length>0}/>
 			<span className="task-label">
 				<input className="name" type="text" defaultValue={title}/>
 				<span className="task-title">
@@ -63,9 +64,16 @@ export default function TaskListItem(props: PropTypes) {
 			</span>
 			<span className="format-container">
 				{outputs.map((output, idx) => 
-					<span key={idx} className="format"><span>{output.format}</span><button className="format-control" onClick={event => onChange(id, event.target.value.toLowerCase())} value={output.format}>X</button></span>
+					<span key={idx} className="format">
+						<span>{output.format}</span>
+						{(output.progress >= 100)
+							? <button className="format-control" onClick={() => onShow(output._id)} value={output.format}>view</button>
+							: <button className="format-control" onClick={event => onChange(id, event.target.value.toLowerCase())} value={output.format} disabled={output.progress>0}>{(output.progress>0)?null:'X'}</button>
+						}
+					</span>
 				)}
-				<select className="format" defaultValue={false} placeholder="select" onChange={event => onChange(id, event.target.value.toLowerCase())}>
+				<select className="format" value={0} placeholder="select" onChange={event => onChange(id, event.target.value.toLowerCase())}>
+					<option value={0} disabled>Select format</option>
 					{VIDEO_FORMATS.map(FORMAT => {
 						if (FORMAT.value !== format && _.findIndex(outputs,['format',FORMAT.value]) < 0) return <option key={FORMAT.value} value={FORMAT.value}>{FORMAT.label}</option>;
 					})}

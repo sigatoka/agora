@@ -41,15 +41,12 @@ export default class Lottie extends React.Component {
     });
 
     this.anim.onSegmentStart = (event) => {
-      if ('function' === typeof this.props.onStart) {
-        this.props.onStart(event);
-      } else {
-        console.log("Segment start", event)
-      }
+      if ('function' !== typeof this.props.onStart) return;
+      this.props.onStart(event);
     }
     this.anim.onComplete = (prop) => {
       if ('function' === typeof this.props.onEnd) {
-        this.props.onEnd(this.anim);
+        this.props.onEnd(prop);
       } else {
         console.log("Complete",prop);
       }

@@ -1,6 +1,7 @@
 // Modules
 import { ipcRenderer } from 'electron';
-//import createHash from 'create-hash';
+import store from '../reducers';
+import createHash from 'create-hash';
 // Types
 import {
 	UPDATE_FILE,
@@ -8,6 +9,32 @@ import {
 	REMOVE_FILE,
 	REMOVE_ALL_FILES
 } from './types';
+
+/**
+ * File Metadata Event
+ * @desc Handles the file metadata from the main process
+ */
+ipcRenderer.on('files:meta', (event, filesWithMeta) => {
+	// Model the file data from metadata
+	filesWithMeta = filesWithMeta.map(meta => {
+		meta.name = nameFromPath(meta.path);
+		meta.title = titleFromFileName(meta.name);
+		meta._id = fileHashFromString(meta.path);
+		meta.directory = meta.path.replace(meta.name,'');
+		meta.format = extensionFromFilename(meta.name);
+		return meta;
+	});
+	// Notify the file store
+	store.dispatch({type:ADD_FILES,payload:filesWithMeta});
+});
+
+/**
+ * File Error Event
+ * @desc Handles the file error from the main process
+ */
+ipcRenderer.on('files:error', (event, error) => {
+	console.error(error);
+});
 
 /**
  * @name Update File
@@ -24,24 +51,6 @@ export const updateFile = file => dispatch => dispatch({ type:UPDATE_FILE,payloa
 export const addFiles = paths => dispatch => {
 	// Load files for given paths
 	ipcRenderer.send('files:added', paths);
-	// Handle file metadata from the main process
-	ipcRenderer.on('files:meta', (event, filesWithMeta) => {
-
-		filesWithMeta = filesWithMeta.map(meta => {
-			meta.name = nameFromPath(meta.path);
-			meta.title = titleFromFileName(meta.name);
-			meta._id = fileHashFromString(meta.path);
-			meta.directory = meta.path.replace(meta.name,'');
-			meta.format = extensionFromFilename(meta.name);
-			return meta;
-		});
-
-		dispatch({type:ADD_FILES,payload:filesWithMeta});
-	});
-
-	ipcRenderer.on('files:error', (event, error) => {
-		console.error(error);
-	});
 }
 
 /**
@@ -79,6 +88,5 @@ function titleFromFileName(name) {
 }
 
 function fileHashFromString(str) {
-	return str;
-	//return createHash('sha256').update(str).digest('hex');
+	return createHash('sha256').update(str).digest('hex');
 }

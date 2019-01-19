@@ -11,8 +11,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const htmlPlugin = new HtmlWebPackPlugin({
 	title: "Agora",
 	template: "./src/index.html",
-	filename: "./index.html",
-	favicon: "./assets/icon.ico",
+	filename: "index.html",
 	meta: {
 		"viewport": "width=device-width, initial-scale=1, shrink-to-fit=no",
 		"theme-color": "#f9f9f9"
@@ -43,11 +42,11 @@ fs.readdirSync('node_modules').filter(function(x) {
  */
 module.exports = {
 	externals: nodeModules,
-	entry: './src/App.js',
+	entry: ['webpack/hot/dev-server', './src/App.js'],
 	target: 'electron-renderer',
 	output: {
 		path: path.resolve(__dirname, 'build'),
-		publicPath: './',
+		publicPath: '/',
 		filename: 'bundle.js'
 	},
 	module: {
@@ -75,15 +74,20 @@ module.exports = {
 			}
 		]
 	},
-	plugins:[
-		htmlPlugin
+	plugins: [
+		htmlPlugin,
+		new webpack.HotModuleReplacementPlugin()
 	],
 	resolve: {
-		extensions: ['.js','.jsx','.ts','.tsx']
+		extensions: ['.ts','.tsx','.js','.jsx']
 	},
 	devServer: {
+		publicPath:'http://localhost:9000',
+		contentBase: path.join(__dirname, 'assets'),
+		open: false,
+		lazy: false,
+		compress: true,
 		historyApiFallback: true,
-		contentBase: path.join(__dirname, 'build'),
-		port: 4172
+		port: 9000
 	}
 }
