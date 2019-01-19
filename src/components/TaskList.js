@@ -17,6 +17,7 @@ import '../styles/TaskListItem.css';
 
 import {
 	addTask,
+	startTasks,
 	removeTask
 } from '../actions/TaskActions';
 
@@ -25,6 +26,7 @@ function mapStateToProps({ files, tasks }) {
 }
 
 const mapDispatchToProps = {
+	startTasks,
 	updateFile,
 	removeFile,
 	removeAllFiles,
@@ -36,7 +38,6 @@ const mapDispatchToProps = {
 class TaskList extends React.Component {
 
 	didChangeFormat(atKey, toFormat) {
-
 		let file = this.props.files[atKey];
 		if (!file) return;
 		if (!(file.outputs instanceof Array)) file.outputs = [];
@@ -61,6 +62,10 @@ class TaskList extends React.Component {
 		}
 
 		this.props.updateFile(file);
+	}
+
+	didClick(asset) {
+		this.props.startTasks(asset.outputs);
 	}
 
 	didSelectShowInFolder(atKey) {
@@ -98,6 +103,7 @@ class TaskList extends React.Component {
 						<TaskListItem
 							style={styles}
 							hash={asset._id}
+							onClick={this.didClick.bind(this, asset)}
 							onShow={this.didSelectShowInFolder.bind(this)}
 							onChange={this.didChangeFormat.bind(this)}
 							onReset={this.didSelectReset.bind(this)}

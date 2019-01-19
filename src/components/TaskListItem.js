@@ -28,6 +28,7 @@ export type PropTypes = {
 	title: string;
 	format: VideoFormats;
 	outputs: array<TaskProps>;
+	onClick(): void;
 	onChange(id: string, values: object): void;
 	onShow(id: string): void;
 	onReset(id: string): void;
@@ -42,6 +43,7 @@ export default function TaskListItem(props: PropTypes) {
 		name,
 		format,
 		outputs,
+		onClick,
 		onReset,
 		onRemove,
 		onChange,
@@ -51,8 +53,8 @@ export default function TaskListItem(props: PropTypes) {
 	const progress = (outputs.length === 0) ? 0 : (outputs.reduce((sum, output) => { return sum+(output.progress||0) }, 0) / outputs.length);
 
 	return (
-		<div className="task-list-item" data-js="TaskListItem" style={{...props.style}}>
-			<TaskListItemStatus progress={progress} complete={progress===100} range={[0,30]}/>
+		<div className="task-list-item" data-js="TaskListItem" style={{...props.style,padding:"12px 3vmin"}}>
+			<TaskListItemStatus progress={progress} onClick={onClick.bind(this)} clickable={outputs.length>0}/>
 			<span className="task-label">
 				<input className="name" type="text" defaultValue={title}/>
 				<span className="task-title">
@@ -70,10 +72,10 @@ export default function TaskListItem(props: PropTypes) {
 						}
 					</span>
 				)}
-				<select className="format" defaultValue={false} placeholder="select" onChange={event => onChange(id, event.target.value.toLowerCase())}>
-					<option value={false}>Select format</option>
+				<select className="format" value={0} placeholder="select" onChange={event => onChange(id, event.target.value.toLowerCase())}>
+					<option value={0} disabled>Select format</option>
 					{VIDEO_FORMATS.map(FORMAT => {
-						if (FORMAT.value !== format && _.findIndex(outputs,['format',FORMAT.value]) < 0) return <option key={FORMAT.value} defaultValue={FORMAT.value}>{FORMAT.label}</option>;
+						if (FORMAT.value !== format && _.findIndex(outputs,['format',FORMAT.value]) < 0) return <option key={FORMAT.value} value={FORMAT.value}>{FORMAT.label}</option>;
 					})}
 				</select>
 				{(outputs.length > 0)

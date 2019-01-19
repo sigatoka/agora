@@ -5,7 +5,6 @@ import store from './reducers/index';
 // Components
 import TaskList from './components/TaskList';
 import SelectionView from './views/SelectionView';
-import ConversionView from './views/ConversionView';
 // CSS
 import './styles/App.css';
 
@@ -14,7 +13,6 @@ const App = (
 		<Fragment>
 			<SelectionView/>
 			<TaskList/>
-			<ConversionView/>
 		</Fragment>
 	</Provider>
 )

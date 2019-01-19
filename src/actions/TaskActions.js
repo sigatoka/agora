@@ -1,19 +1,32 @@
 // Modules
 import { ipcRenderer } from 'electron';
-//import createHash from 'create-hash';
+import store from '../reducers';
 import _ from 'lodash';
 // Types
 import {
 	ADD_TASK,
 	REMOVE_TASK,
 	RESET_TASKS,
-	TASK_COMPLETE,
-	TASK_PROGRESS,
-	TASK_FAILED
+	TASK_PROGRESS
 } from './types';
 
+ipcRenderer.on('convert:progress', (event, task) => {
+	//console.log(Math.floor(file.progress)+"%")
+	store.dispatch({ type:TASK_PROGRESS, payload:task });
+});
+// Monitor completion
+ipcRenderer.on('convert:end', (event, task) => {
+	// Update store
+	// Trigger new file load
+	ipcRenderer.send('files:added', [task.output]);
+	// Notify User
+	let notification = new Notification('Task Completed', {
+		body:'Created file '+titleFromFileName(nameFromPath(task.output))
+	});
+});
+
 /**
- * @name Start Tasks
+ * Start Tasks
  * @desc Sends tasks too be handled by the main process
  * @param {array<object>} tasks - Array of configured task objects.
  */
@@ -27,34 +40,17 @@ export const startTasks = tasks => dispatch => {
 	});
 	// Begin conversion
 	ipcRenderer.send('convert:start', tasks);
-	// Observe progress
-	// ! Not the right way to add listeners
-		// Causes a new listener to subscribe on each call
-	ipcRenderer.on('convert:progress', (event, task) => {
-		//console.log(Math.floor(file.progress)+"%")
-		dispatch({ type:TASK_PROGRESS, payload:task });
-	});
-	// Monitor completion
-	ipcRenderer.on('convert:end', (event, task) => {
-		// Update store
-		// Trigger new file load
-		ipcRenderer.send('files:added', [task.output]);
-		// Notify User
-		let taskCompletedNotification = new Notification('Task Completed', {
-			body:'Created file '+titleFromFileName(nameFromPath(task.output))
-		});
-	});
 }
 
 /**
- * @name Add Task
+ * Add Task
  * @desc Adds the specified task object into state
  * @param {object} task - Configured task object.
  */
 export const addTask = task => dispatch => dispatch({ type:ADD_TASK, payload:task });
 
 /**
- * @name Remove Task
+ * Remove Task
  * @desc Adds the specified task object into state
  * @param {object} task - Configured task object.
  */
@@ -73,9 +69,4 @@ function nameFromPath(path) {
 
 function titleFromFileName(name) {
 	return name.split(/\./gi)[0];
-}
-
-function fileHashFromString(str) {
-	return "";
-	//return createHash('sha256').update(str).digest('hex');
 }
