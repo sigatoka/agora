@@ -46,7 +46,7 @@ module.exports = {
 	target: 'electron-renderer',
 	output: {
 		path: path.resolve(__dirname, 'build'),
-		publicPath: '/',
+		publicPath: '.',
 		filename: 'bundle.js'
 	},
 	module: {

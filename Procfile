@@ -1,2 +1,2 @@
-react: webpack-dev-server --env development --progress
-electron: node ./foreman.config.js
+react: npm run start:react
+electron: node foreman.config.js

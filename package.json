@@ -1,6 +1,6 @@
 {
   "name": "Agora",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Simple File Conversion Application",
   "main": "main.js",
   "author": "Mitch Pierias <github.com/MitchPierias>",
@@ -16,13 +16,16 @@
     "ffmpeg"
   ],
   "scripts": {
-    "start": "electron .",
-    "start:dev": "webpack-dev-server --env development --progress",
+    "start": "nf start",
+    "start:react": "webpack-dev-server --env development --progress",
+    "start:electron": "electron .",
     "build": "webpack --env production",
     "dist": "electron-builder",
-    "docs": "./node_modules/.bin/typedoc --out ./docs --mode modules"
+    "docs": "./node_modules/.bin/typedoc --out ./docs --mode modules",
+    "test": "mocha"
   },
   "dependencies": {
+    "create-hash": "^1.2.0",
     "ffmpeg-static": "^2.4.0",
     "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
@@ -74,9 +77,10 @@
       "build/**/*",
       "assets/**/*",
       "!dist/**/*",
-      "!assets/**/*",
+      "!src/**/*",
       "!spec/**/*",
       "!config/**/*",
+      "!files/**/*",
       "node_modules/**/*",
       "node_modules/ffmpeg-static/bin/${os}/${arch}/ffmpeg",
       "node_modules/ffmpeg-static/index.js",
