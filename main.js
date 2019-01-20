@@ -5,9 +5,7 @@ const fs = require('fs');
 const _path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 const CONFIG = require('./config.js');
-const settings = {allowOverwrite:false,outputDir:_path.resolve(__dirname,'files')};
-
-console.log(CONFIG.ffmpegPath);
+const settings = {allowOverwrite:false,outputDir:_path.resolve(__dirname,'files')}; // Load&Save these from JSON memory store else CONFIG
 // Set the path to packaged binaries
 ffmpeg.setFfmpegPath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg');
 ffmpeg.setFfprobePath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffprobe-static/bin/darwin/x64/ffprobe');
@@ -23,10 +21,10 @@ app.on('ready', () => {
 			backgroundThrottling:false
 		}
 	});
-
-	mainWindow.webContents.openDevTools()
-	// Load root display
-	mainWindow.loadURL(`http://localhost:9000`); // `file://${__dirname}/build/index.html`
+	
+	if (process.env.MODE === 'development') mainWindow.webContents.openDevTools()
+	// Load primary UI
+	mainWindow.loadURL((process.env.MODE === 'development') ? `http://localhost:9000` : `file://${__dirname}/build/index.html`);
 	// Handle closed window
 	mainWindow.on('closed', () => {
 		// Dereference the window object
@@ -105,7 +103,7 @@ ipcMain.on('files:added', (event, paths) => addFiles(paths));
 ipcMain.on('convert:start', (event, tasks) => {
 
 	_.each(tasks, task => {
-
+		
 		const filename = `${task.name}.${task.format}`;
 		const basePath = task.output.replace(filename,'');
 

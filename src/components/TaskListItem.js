@@ -56,7 +56,7 @@ export default function TaskListItem(props: PropTypes) {
 		<div className="task-list-item" data-js="TaskListItem" style={{...props.style,padding:"12px 3vmin"}}>
 			<TaskListItemStatus progress={progress} onClick={onClick.bind(this)} clickable={outputs.length>0}/>
 			<span className="task-label">
-				<input className="name" type="text" defaultValue={title}/>
+				<input className="name" type="text" defaultValue={title} disabled={true}/>
 				<span className="task-title">
 					<label className="">{(format||'').toUpperCase()}</label>
 					<span className="name">{name}</span>

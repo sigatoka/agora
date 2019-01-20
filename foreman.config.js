@@ -1,28 +1,31 @@
-const net = require('net')
-const childProcess = require('child_process')
+const { Socket } = require('net');
+const { exec } = require('child_process');
+const port = 'number' === typeof process.env.PORT ? process.env.PORT : 9000;
 
-const port = process.env.PORT ? process.env.PORT - 100 : 3000
+process.env.MODE = 'development';
 
-process.env.ELECTRON_START_URL = `http://localhost:${port}`
-
-const client = new net.Socket()
+const client = new Socket()
 
 let isRunning = false
 const tryConnection = () => {
   client.connect( { port }, () => {
       client.end()
-      if (!startedElectron) {
-        console.log('Starting electron')
+      if (!isRunning) {
         isRunning = true
-        const exec = childProcess.exec
-        exec('node electron .')
+        console.log('Starting electron');
+        exec('npm run start:electron');
       }
     }
   )
 }
 
-tryConnection()
-
-client.on('error', () => {
-  setTimeout(tryConnection, 1000)
+client.on('error', (err) => {
+  if (err.code === 'ECONNREFUSED') {
+    console.log("Connection failed, retrying in 3 seconds");
+    setTimeout(tryConnection, 3000);
+  } else {
+    console.log(err.code);
+  }
 });
+
+tryConnection()

@@ -43,14 +43,14 @@ export default class TaskListItemStatus extends React.Component<PropTypes, State
 	componentWillUpdate(nextProps, nextState) {
 		if (nextProps.clickable === this.props.clickable) return;
 		const { currentPosition, anim } = nextState;
+		nextState.paused = false;
 		if (nextProps.clickable) {
 			anim.playSegments([KEYFRAMES[currentPosition],KEYFRAMES[currentPosition+1]]);
 		} else {
 			console.log("rewind");
-			anim.setDirection(-1);
+			anim.setDirection(-1); // Rewind is not functioning
 			anim.play();
 		}
-		nextState.paused = false;
 	}
 	
 	didClick() {
