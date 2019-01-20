@@ -10,3 +10,5 @@ npm run build
 
 echo -e "${CYAN}Compiling distrbution"
 npm run dist
+
+open ./dist
