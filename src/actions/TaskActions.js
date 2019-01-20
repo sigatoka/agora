@@ -21,7 +21,7 @@ ipcRenderer.on('convert:end', (event, task) => {
 	ipcRenderer.send('files:added', [task.output]);
 	// Notify User
 	let notification = new Notification('Task Completed', {
-		body:'Created file '+titleFromFileName(nameFromPath(task.output))
+		body:'Converted '+titleFromFileName(nameFromPath(task.output))
 	});
 });
 

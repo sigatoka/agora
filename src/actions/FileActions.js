@@ -37,14 +37,14 @@ ipcRenderer.on('files:error', (event, error) => {
 });
 
 /**
- * @name Update File
+ * Update File
  * @desc Overwrites the given file at key 'hash'
  * @param {Object} file - File data object
  */
 export const updateFile = file => dispatch => dispatch({ type:UPDATE_FILE,payload:file });
 
 /**
- * @name Add File
+ * Add File
  * @desc Merges the provided file at key 'hash'
  * @param {Array<Object>} files - Array of file objects
  */
@@ -54,20 +54,20 @@ export const addFiles = paths => dispatch => {
 }
 
 /**
- * @name Remove File
+ * Remove File
  * @desc Removes the file matching the specified 'hash' key.
  * @param {object} file - File to remove.
  */
 export const removeFile = file => dispatch => dispatch({ type:REMOVE_FILE, payload:file });
 
 /**
- * @name Remove All
+ * Remove All
  * @desc Removes all files in the store.
  */
 export const removeAllFiles = () => dispatch => dispatch({ type:REMOVE_ALL_FILES });
 
 /**
- * @name Show Directory
+ * Show Directory
  * @desc Notifies the main process to open the directory at the specified path.
  * @param {string} directoryPath - Full path to the directory.
  */
