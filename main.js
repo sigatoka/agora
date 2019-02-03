@@ -1,5 +1,5 @@
 // Electron Components
-const { app, BrowserWindow, ipcMain, shell, Menu, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Menu, dialog, Tray } = require('electron');
 const _ = require('lodash');
 const fs = require('fs');
 const _path = require('path');
@@ -10,16 +10,19 @@ const settings = {allowOverwrite:false,outputDir:_path.resolve(__dirname,'files'
 ffmpeg.setFfmpegPath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg');
 ffmpeg.setFfprobePath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffprobe-static/bin/darwin/x64/ffprobe');
 // Main Window Reference
-let mainWindow = null;
+let mainWindow = null, trayWindow = null;
 
 app.on('ready', () => {
 
+	//trayWindow = new Tray(_path.join(__dirname, '/build/icons/16x16.png'));
+	
 	mainWindow = new BrowserWindow({
 		width:800,
 		height:600,
 		webPreferences: {
 			backgroundThrottling:false
-		}
+		},
+		icon:_path.join(__dirname, '/build/icons/64x64.png')
 	});
 	
 	if (process.env.MODE === 'development') mainWindow.webContents.openDevTools()
