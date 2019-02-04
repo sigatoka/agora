@@ -95,7 +95,7 @@
     ],
     "mac": {
       "target": "default",
-      "icon": "./build/icons/512x512.png",
+      "icon": "./assets/icons/512x512.png",
       "category": "public.app-category.productivity",
       "files": [
         "!node_modules/ffmpeg-static/bin/win${/*}",
@@ -106,7 +106,7 @@
     },
     "win": {
       "target": "appx",
-      "icon": "./build/icon.ico",
+      "icon": "./assets/icon.ico",
       "files": [
         "!node_modules/ffmpeg-static/bin/mac${/*}",
         "!node_modules/ffmpeg-static/bin/linux${/*}",
@@ -116,7 +116,7 @@
     },
     "linux": {
       "target": "AppImage",
-      "icon": "./build/icons/512x512.png",
+      "icon": "./assets/icons/512x512.png",
       "files": [
         "!node_modules/ffmpeg-static/bin/mac${/*}",
         "!node_modules/ffmpeg-static/bin/win${/*}",
