@@ -14,7 +14,7 @@ let mainWindow = null, trayWindow = null;
 
 app.on('ready', () => {
 
-	//trayWindow = new Tray(_path.join(__dirname, '/build/icons/16x16.png'));
+	//trayWindow = new Tray(_path.join(__dirname, '/assets/icons/16x16.png'));
 	
 	mainWindow = new BrowserWindow({
 		width:800,
@@ -22,7 +22,7 @@ app.on('ready', () => {
 		webPreferences: {
 			backgroundThrottling:false
 		},
-		icon:_path.join(__dirname, '/build/icons/64x64.png')
+		icon:_path.join(__dirname, '/assets/icons/64x64.png')
 	});
 	
 	if (process.env.MODE === 'development') mainWindow.webContents.openDevTools()
