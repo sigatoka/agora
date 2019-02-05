@@ -1,4 +1,4 @@
-# Agora
+# ![Logo](/src/images/favicon-32x32.png) Agora
 Simple File Conversion Application
 
 > Built with Electron and React to interface with the bundled ffMpeg package.
