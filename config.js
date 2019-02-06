@@ -3,5 +3,6 @@ const ffprobePath = require('ffprobe-static').path;
 
 module.exports = {
 	ffmpegPath: ffmpegPath,
-	ffprobePath: ffprobePath
+	ffprobePath: ffprobePath,
+	formats:['mp4','m4v','mkv','mov','ogv','avi']
 }
