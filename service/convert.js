@@ -1,4 +1,5 @@
 const ffmpeg = require('fluent-ffmpeg');
+const { makeUnique } = require('./file');
 // Set the path to packaged binaries
 ffmpeg.setFfmpegPath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg');
 ffmpeg.setFfprobePath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffprobe-static/bin/darwin/x64/ffprobe');
@@ -14,7 +15,7 @@ function run(files) {
 }
 
 function convertFile(inputPath, outputFormat, onProgress) {
-    const outputPath = inputPath.replace(/\w+$/gi,outputFormat);
+    const outputPath = makeUnique(inputPath).replace(/\w+$/gi,outputFormat);
     return new Promise((resolve, reject) => {
         ffmpeg(inputPath).on('progress', ({ percent }) => {
             onProgress(percent/100);
