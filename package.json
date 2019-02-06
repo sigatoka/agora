@@ -1,6 +1,6 @@
 {
-  "name": "Agora",
-  "version": "0.2.3",
+  "name": "agora",
+  "version": "0.2.4",
   "description": "Simple File Conversion Application",
   "main": "main.js",
   "author": "Mitch Pierias <github.com/MitchPierias>",
@@ -91,12 +91,26 @@
       "node_modules/ffmpeg-static/package.json",
       "node_modules/ffprobe-static/bin/${os}/${arch}/ffmpeg",
       "node_modules/ffprobe-static/index.js",
-      "node_modules/ffprobe-static/package.json"
+      "node_modules/ffprobe-static/package.json",
+      "embedded.provisionprofile"
     ],
     "mac": {
-      "target": "default",
+      "target": ["pkg","dmg","zip","mas"],
       "icon": "./assets/icons/512x512.png",
       "category": "public.app-category.productivity",
+      "entitlements": "./build/entitlements.mac.plist",
+      "files": [
+        "!node_modules/ffmpeg-static/bin/win${/*}",
+        "!node_modules/ffmpeg-static/bin/linux${/*}",
+        "!node_modules/ffprobe-static/bin/win${/*}",
+        "!node_modules/ffprobe-static/bin/linux${/*}"
+      ]
+    },
+    "mas": {
+      "type": "distribution",
+      "category": "public.app-category.productivity",
+      "entitlements": "./build/entitlements.mas.plist",
+      "icon": "./assets/agora.icns",
       "files": [
         "!node_modules/ffmpeg-static/bin/win${/*}",
         "!node_modules/ffmpeg-static/bin/linux${/*}",
@@ -105,8 +119,9 @@
       ]
     },
     "win": {
-      "target": "appx",
+      "target": ["nsis"],
       "icon": "./assets/icon.ico",
+      "publisherName": "Mitch Pierias",
       "files": [
         "!node_modules/ffmpeg-static/bin/mac${/*}",
         "!node_modules/ffmpeg-static/bin/linux${/*}",
@@ -114,8 +129,12 @@
         "!node_modules/ffprobe-static/bin/linux${/*}"
       ]
     },
+    "nsis": {
+      "artifactName": "${productName}_${version}.${ext}",
+      "installerIcon": "./assets/agora.ico"
+    },
     "linux": {
-      "target": "AppImage",
+      "target": ["deb"],
       "icon": "./assets/icons/512x512.png",
       "files": [
         "!node_modules/ffmpeg-static/bin/mac${/*}",

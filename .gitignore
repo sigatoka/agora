@@ -7,6 +7,7 @@
 # production
 /build
 /dist
+/certs
 
 # references
 /ref
@@ -27,3 +28,4 @@ yarn-error.log*
 # samples
 /files
 package-lock.json
+embedded.provisionprofile
