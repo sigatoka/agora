@@ -1,4 +1,4 @@
-# <img src="/assets/icons/favicon-32x32.png" alt="Logo" height="28px"> Agora
+# <img src="/assets/icons/32x32.png" alt="Logo" height="28px"> Agora
 Simple File Conversion Application
 
 > Built with Electron and React to interface with the bundled ffMpeg package.
