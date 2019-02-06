@@ -1,7 +1,6 @@
-# <img src="/assets/icons/32x32.png" alt="Logo" height="28px"> Agora
+# ![Logo](/assets/icons/32x32.png) Agora
 Simple File Conversion Application
 
-> Built with Electron and React to interface with the bundled ffMpeg package.
 
 ## Usage
 ### Build From Source
@@ -40,26 +39,26 @@ npm start
 ```
 
 ## Tech Stack
-**FFMpeg**
+**FFMpeg:**
 The backbone of our file conversion, FFMpeg which normally install in the command line, instead comes bundles with the application and interfaced behind the scenes with our NodeJS Service.
 
-**Electron**
+**Electron:**
 Thanks to GitHub for this little open source gem. Electron makes JavaScript web interfaces run within desktop applications and across all platforms.
 
-**eletron-builder**
+**Eletron-Builder:**
 It may be just a plugin, but electron-builder carries most of the weight when it comes to compiling, code signing and publishing our binaries, everything distribution is here!
 
-**React**
+**React:**
 No need to introduce this one... React helps easily create component based applications and is extremely powerful when combined with Electron.
 
-**Lottie**
+**Lottie:**
 Lottie is an open source project by AirBnb and is resonsible for the fancy SVG progress and logo animations within the application. 
 
-**WebPack**
+**WebPack:**
+From React components to a single compiled JavaScript file, WebPack put's it all together!
+- **webpack-dev-server:** Hosts live builds from source with hot swap loading to make sure we're always viewing the latest verison when developing.
 
-- webpack-dev-server: Hosts live builds from source with hot swap loading to make sure we're always viewing the latest verison when developing.
-
-**Foreman**
+**Foreman:**
 Starting a development environment is made simple thanks to Foreman. This module helps us configure a startup command queue, waiting for our webpack-dev-server to begin serving before starting our electron application, and all in one command.
 
 **Mocha**
