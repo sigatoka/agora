@@ -18,10 +18,30 @@ describe("Convert", () => {
             assert.isBelow(progress, 1, 'Progress should be less than one');
         }).then(outputPath => {
             assert.isTrue(fs.existsSync(outputPath), `File '${outputPath}' should exist`);
-        }).catch(console.log);
-    }).timeout(20000);
+        })
+    }).timeout(5000);
 
-    after(cleanup);
+    it("Should convert file to copy", () => {
+        const expectedOutputPath = SAMPLE_FILE_PATH.replace(/\.[\w\d\-]+$/gi,'_1.'+OUTPUT_FORMAT);
+        return convertFile(SAMPLE_FILE_PATH, OUTPUT_FORMAT, (progress) => {
+            assert.isAbove(progress, 0, 'Progress should be greater than zero');
+            assert.isBelow(progress, 1, 'Progress should be less than one');
+        }).then(outputPath => {
+            assert.isTrue(fs.existsSync(outputPath), `File '${outputPath}' should exist`);
+            assert.equal(outputPath, expectedOutputPath, `Output path '${outputPath}' doesn't match expected '${expectedOutputPath}'`);
+        })
+    }).timeout(5000);
+
+    it("Should convert file to copy", () => {
+        const expectedOutputPath = SAMPLE_FILE_PATH.replace(/\.[\w\d\-]+$/gi,'_2.'+OUTPUT_FORMAT);
+        return convertFile(SAMPLE_FILE_PATH, OUTPUT_FORMAT, (progress) => {
+            assert.isAbove(progress, 0, 'Progress should be greater than zero');
+            assert.isBelow(progress, 1, 'Progress should be less than one');
+        }).then(outputPath => {
+            assert.isTrue(fs.existsSync(outputPath), `File '${outputPath}' should exist`);
+            assert.equal(outputPath, expectedOutputPath, `Output path '${outputPath}' doesn't match expected '${expectedOutputPath}'`);
+        })
+    }).timeout(5000);
 });
 
 function cleanup(callback) {
