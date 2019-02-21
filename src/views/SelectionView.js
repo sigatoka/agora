@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 // Components
 import Dropzone from 'react-dropzone';
 // CSS
-import '../styles/SelectionView.css';
+import './SelectionView.scss';
 // Actions
 import {
 	addFiles

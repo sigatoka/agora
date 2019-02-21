@@ -6,7 +6,7 @@ import store from './reducers/index';
 import TaskList from './components/TaskList';
 import SelectionView from './views/SelectionView';
 // CSS
-import './styles/App.css';
+import './App.scss';
 
 const App = (
 	<Provider store={store}>

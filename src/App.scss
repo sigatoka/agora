@@ -24,7 +24,7 @@ body {
 	font-weight:100;
 }
 
-div#root {
+#root {
 	width: 100vw !important;
 	height: 100vh !important;
 	display:flex;
@@ -35,24 +35,9 @@ div#root {
 	flex-wrap: nowrap;
 	overflow:hidden;
 }
-
-.drag-region {
-	-ms-overflow-style: scrollbar;
-	-webkit-user-select: none;
-	-webkit-app-region:drag;
-}
-/** Button window dragging fix **/
-input[type="submit"],
-input[type="reset"],
-input[type="button"],
-input[type="text"],
-button,
-textarea {
-	-webkit-app-region: no-drag;
-}
 /** Disable Highlighting **/
 h1, h2, h3, h4, h5, h6 {
-	-webkit-user-select: none;
+	user-select: none;
 }
 
 h1 {

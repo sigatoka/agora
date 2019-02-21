@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string, number } from 'prop-types';
+import { shape, string, array } from 'prop-types';
 import { connect } from 'react-redux';
 import { Transition } from 'react-spring'
 import _ from 'lodash';
@@ -13,7 +13,7 @@ import {
 	showInFolder
 } from '../actions/FileActions';
 
-import '../styles/TaskListItem.css';
+import './TaskList/TaskList.scss';
 
 import {
 	addTask,
@@ -21,9 +21,10 @@ import {
 	removeTask
 } from '../actions/TaskActions';
 
-function mapStateToProps({ files, tasks }) {
-	return { files, tasks };
-}
+const mapStateToProps = ({ files, tasks }) => ({
+	files,
+	tasks
+})
 
 const mapDispatchToProps = {
 	startTasks,
@@ -36,6 +37,26 @@ const mapDispatchToProps = {
 }
 
 class TaskList extends React.Component {
+
+	static propTypes = {
+		files:shape({
+			_id:string,
+			title:string,
+			name:string,
+			outputs:array,
+			format:string
+		})
+	}
+
+	constructor() {
+		super();
+		// Bindings
+		this.didChangeFormat = this.didChangeFormat.bind(this);
+		this.didClick = this.didClick.bind(this);
+		this.didSelectShowInFolder = this.didSelectShowInFolder.bind(this);
+		this.didSelectReset = this.didSelectReset.bind(this);
+		this.didSelectRemove = this.didSelectRemove.bind(this);
+	}
 
 	didChangeFormat(atKey, toFormat) {
 		let file = this.props.files[atKey];
@@ -104,10 +125,10 @@ class TaskList extends React.Component {
 							style={styles}
 							hash={asset._id}
 							onClick={this.didClick.bind(this, asset)}
-							onShow={this.didSelectShowInFolder.bind(this)}
-							onChange={this.didChangeFormat.bind(this)}
-							onReset={this.didSelectReset.bind(this)}
-							onRemove={this.didSelectRemove.bind(this)}
+							onShow={this.didSelectShowInFolder}
+							onChange={this.didChangeFormat}
+							onReset={this.didSelectReset}
+							onRemove={this.didSelectRemove}
 							id={asset._id}
 							title={asset.title}
 							name={asset.name}

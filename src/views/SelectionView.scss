@@ -7,9 +7,10 @@ section.selection {
 	justify-content:center;
 	align-items: stretch;
 	align-content: stretch;
+	transition: flex 0.3s ease-in-out;
 }
 
-section .container {
+section.container {
 	font-size:3vmin;
 	display:flex;
 	flex-direction:row;

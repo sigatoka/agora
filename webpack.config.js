@@ -13,6 +13,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
 	template: "./src/index.html",
 	filename: "index.html",
 	meta: {
+		"charset":"utf-8",
 		"viewport": "width=device-width, initial-scale=1, shrink-to-fit=no",
 		"theme-color": "#f9f9f9"
 	},
@@ -52,6 +53,11 @@ module.exports = {
 	module: {
 		rules: [
 			{
+				test: /\.ts$/,
+				use: {
+					loader: 'tslint-loader'
+				}
+			}, {
 				test: /\.js$/,
 				exclude: [
 					/node_modules/,

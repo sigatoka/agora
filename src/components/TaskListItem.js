@@ -4,7 +4,7 @@ import _ from 'lodash';
 // Components
 import TaskListItemStatus from './TaskListItemStatus';
 // CSS
-import '../styles/TaskListItem.css';
+import './TaskList/TaskList.scss';
 // Formats
 const VIDEO_FORMATS = [
   {value:'avi',label:'AVI'},
