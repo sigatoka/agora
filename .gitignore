@@ -18,14 +18,10 @@
 .env.development.local
 .env.test.local
 .env.production.local
-package-lock.json
-yarn.lock
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # samples
-/files
-package-lock.json
 embedded.provisionprofile

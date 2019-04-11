@@ -1,6 +1,6 @@
 # ![Logo](/assets/icons/32x32.png) Agora
 Simple File Conversion Application
-
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 ## Usage
 ### Build From Source
@@ -63,3 +63,5 @@ Starting a development environment is made simple thanks to Foreman. This module
 
 **Mocha**
 Last but not least is our testing framework, Mocha. Possibly the most important thing in a test-driven development environment, and ironing out bugs for production, Mocha makes sure our code does what it says it does!
+
+**Lerna**

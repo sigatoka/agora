@@ -1,0 +1,43 @@
+{
+  "name": "@agora/common",
+  "version": "0.2.5",
+  "description": "Simple File Conversion Application",
+  "main": "src/index.js",
+  "author": "Mitch Pierias <github.com/MitchPierias>",
+  "private": true,
+  "homepage": ".",
+  "keywords": [
+    "Convert",
+    "Conversion",
+    "React",
+    "Electron",
+    "Redux",
+    "Lottie",
+    "ffmpeg"
+  ],
+  "scripts": {
+    "build": "webpack --env production",
+    "docs": "./node_modules/.bin/typedoc --out ./docs --mode modules",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "create-hash": "^1.2.0",
+    "lodash": "^4.17.4",
+    "react": "^16.5.x",
+    "react-dom": "^16.5.x",
+    "react-dropzone": "^3.13.4",
+    "react-lottie": "^1.2.3",
+    "react-redux": "^5.0.3",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.3.x",
+    "react-spring": "^5.8.0",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "typedoc": "^0.13.0"
+  },
+  "peerDependencies": {}
+}
