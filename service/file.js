@@ -1,9 +1,12 @@
 const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
+
+var ffmpegPath = require('ffmpeg-static').path;
+var ffprobePath = require('ffprobe-static').path;
 // Set the path to packaged binaries
-ffmpeg.setFfmpegPath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg');
-ffmpeg.setFfprobePath('/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffprobe-static/bin/darwin/x64/ffprobe');
+ffmpeg.setFfmpegPath((process.env.ENV=='dev')?ffmpegPath:'/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg');
+ffmpeg.setFfprobePath((process.env.ENV=='dev')?ffprobePath:'/Applications/Agora.app/Contents/Resources/app.asar.unpacked/node_modules/ffprobe-static/bin/darwin/x64/ffprobe');
 // Defaults
 const SUPPORTED_FORMATS = require('./../config').formats;
 

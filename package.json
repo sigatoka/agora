@@ -17,13 +17,13 @@
   ],
   "scripts": {
     "start": "nf start",
-    "start:react": "webpack-dev-server --env development --progress",
+    "start:react": "ENV=dev webpack-dev-server --env development --progress",
     "start:electron": "electron .",
-    "build": "webpack --env production --publish never",
+    "build": "webpack --env production",
     "dist": "electron-builder --publish never --linux --mac",
     "release": "npm run dist --publish always",
     "docs": "./node_modules/.bin/typedoc --out ./docs --mode modules",
-    "test": "mocha"
+    "test": "ENV=dev mocha"
   },
   "dependencies": {
     "create-hash": "^1.2.0",
